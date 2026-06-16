@@ -13,7 +13,6 @@
       --teal-glow:   rgba(0,164,153,.1);
       --navy:        #0B1F3A;
       --bg:          #f4f6f9;
-      --card:        #ffffff;
       --text-hi:     #1a2733;
       --text-mid:    #637480;
       --text-lo:     #a0b0bc;
@@ -23,33 +22,38 @@
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; overflow: hidden; }
-    body { font-family: var(--font); background: var(--bg); color: var(--text-hi); display: flex; flex-direction: column; font-size: 13px; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text-hi); display: flex; flex-direction: column; }
 
     /* ══════════════════════════════════
        LOGIN SCREEN
     ══════════════════════════════════ */
     #login-screen {
-      position: fixed; inset: 0; background: linear-gradient(135deg, #0B1F3A 0%, #163055 100%);
-      display: flex; align-items: center; justify-content: center; z-index: 1000; transition: opacity .3s;
+      position: fixed; inset: 0;
+      background: linear-gradient(135deg, #0B1F3A 0%, #163055 100%);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999; transition: opacity .3s;
     }
     #login-screen.hidden { opacity: 0; pointer-events: none; }
-
     .login-card {
       background: #fff; border-radius: 18px; padding: 40px 36px;
       max-width: 360px; width: 90%; text-align: center;
-      box-shadow: 0 8px 48px rgba(0,0,0,.25);
+      box-shadow: 0 8px 48px rgba(0,0,0,.28);
     }
-    .login-logo {
-      width: 56px; height: 56px; background: var(--teal); border-radius: 16px;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 18px; font-size: 20px; font-weight: 700; color: #fff;
-    }
+    .login-logo { width: 56px; height: 56px; background: var(--teal); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 20px; font-weight: 700; color: #fff; }
     .login-card h2 { font-size: 18px; font-weight: 700; color: var(--text-hi); margin-bottom: 6px; }
     .login-card p  { font-size: 12.5px; color: var(--text-mid); margin-bottom: 28px; line-height: 1.6; }
-    .login-divider { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .login-divider { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
     .login-divider span { font-size: 11px; color: var(--text-lo); white-space: nowrap; }
     .login-divider::before, .login-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-    #google-btn-wrapper { display: flex; justify-content: center; }
+    #google-btn-wrapper { display: flex; justify-content: center; min-height: 44px; }
+    #google-custom-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 260px; height: 44px; margin: 8px auto 0;
+      background: #fff; border: 1.5px solid #dadce0; border-radius: 4px;
+      cursor: pointer; font-family: var(--font); font-size: 14px; color: #3c4043;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08); transition: box-shadow .2s, background .15s;
+    }
+    #google-custom-btn:hover { box-shadow: 0 2px 8px rgba(0,0,0,.15); background: #f8f9fa; }
     #login-error { display: none; margin-top: 14px; background: #fef0f0; border: 1px solid #f5c6c6; border-radius: 8px; padding: 8px 12px; font-size: 11.5px; color: #c0392b; }
     #login-error.show { display: block; }
     .login-footer { margin-top: 22px; font-size: 10.5px; color: var(--text-lo); line-height: 1.6; }
@@ -58,102 +62,119 @@
        TOP NAV
     ══════════════════════════════════ */
     nav {
-      background: var(--navy); padding: 0 24px;
-      display: flex; align-items: center; gap: 16px;
-      height: 52px; flex-shrink: 0;
-      border-bottom: 1px solid rgba(255,255,255,.06);
+      background: var(--navy); padding: 0 20px;
+      display: flex; align-items: center; gap: 12px;
+      height: 48px; flex-shrink: 0;
     }
-    .nav-brand { display: flex; align-items: center; gap: 10px; }
-    .nav-logo  { width: 28px; height: 28px; background: var(--teal); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; }
+    .nav-logo  { width: 28px; height: 28px; background: var(--teal); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
     .nav-title { font-size: 13px; font-weight: 700; color: #fff; }
-    .nav-sub   { font-size: 10px; color: rgba(255,255,255,.45); margin-top: 1px; }
-
-    .nav-tabs  { display: flex; gap: 2px; margin-left: 24px; }
-    .nav-tab {
-      padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600;
-      color: rgba(255,255,255,.55); cursor: pointer; border: none; background: none;
-      font-family: var(--font); transition: color .15s, background .15s;
-    }
-    .nav-tab:hover   { color: rgba(255,255,255,.85); background: rgba(255,255,255,.06); }
-    .nav-tab.active  { color: #fff; background: rgba(0,164,153,.25); }
-
-    .nav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .nav-sub   { font-size: 10px; color: rgba(255,255,255,.45); }
+    .nav-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
     #user-pill { display: none; align-items: center; gap: 7px; }
     #user-avatar { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,.3); }
-    #user-name   { font-size: 11px; color: rgba(255,255,255,.75); max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #user-name   { font-size: 11px; color: rgba(255,255,255,.75); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     #logout-btn  { background: rgba(255,255,255,.1); border: none; cursor: pointer; color: rgba(255,255,255,.6); font-size: 10.5px; border-radius: 8px; padding: 3px 9px; font-family: var(--font); transition: background .15s; }
     #logout-btn:hover { background: rgba(255,255,255,.2); }
 
     /* ══════════════════════════════════
-       MAIN CONTENT AREA
+       POWER BI FULL AREA
     ══════════════════════════════════ */
-    #app { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
-
-    .tab-panel { display: none; flex: 1; overflow: hidden; flex-direction: column; }
-    .tab-panel.active { display: flex; }
-
-    /* ── Dashboard panel ── */
-    #panel-dashboard {
-      padding: 20px 24px;
-      overflow-y: auto;
-      gap: 16px;
+    #pbi-wrap {
+      flex: 1; overflow: hidden; position: relative;
     }
-
-    .dash-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-    .dash-title  { font-size: 15px; font-weight: 700; color: var(--text-hi); }
-    .dash-sub    { font-size: 11.5px; color: var(--text-mid); }
-    .dash-badge  { background: var(--teal-light); color: var(--teal-dark); border: 1px solid var(--border-teal); border-radius: 20px; padding: 3px 11px; font-size: 11px; font-weight: 600; }
-
-    /* KPI row */
-    .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
-    .kpi-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-      padding: 14px 16px; position: relative; overflow: hidden;
+    #pbi-wrap iframe {
+      width: 100%; height: 100%; border: none; display: block;
     }
-    .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--teal); border-radius: 12px 12px 0 0; }
-    .kpi-label { font-size: 10.5px; color: var(--text-mid); font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
-    .kpi-value { font-size: 24px; font-weight: 700; color: var(--text-hi); margin-top: 4px; line-height: 1; }
-    .kpi-value span { font-size: 13px; font-weight: 400; color: var(--text-mid); }
-    .kpi-delta { font-size: 11px; margin-top: 4px; }
-    .kpi-delta.up   { color: var(--teal); }
-    .kpi-delta.down { color: #e74c3c; }
-
-    /* Power BI embed area */
-    .pbi-section { margin-top: 16px; }
-    .section-label { font-size: 11px; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
-    .pbi-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-      overflow: hidden; position: relative;
-    }
-    .pbi-card iframe { width: 100%; border: none; display: block; height: 480px; }
     .pbi-placeholder {
-      height: 480px; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 12px;
-      color: var(--text-mid); text-align: center; padding: 20px;
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px; color: var(--text-mid); text-align: center; padding: 20px;
+      background: #f4f6f9;
     }
-    .pbi-placeholder svg { width: 40px; height: 40px; opacity: .3; }
-    .pbi-placeholder h3 { font-size: 14px; font-weight: 700; color: var(--text-hi); }
-    .pbi-placeholder p  { font-size: 12px; max-width: 260px; line-height: 1.5; }
-    .pbi-placeholder code { background: #f0f3f5; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--teal-dark); display: block; margin-top: 8px; }
+    .pbi-placeholder svg { width: 48px; height: 48px; opacity: .25; }
+    .pbi-placeholder h3 { font-size: 15px; font-weight: 700; color: var(--text-hi); }
+    .pbi-placeholder p  { font-size: 12.5px; max-width: 300px; line-height: 1.6; }
+    .pbi-placeholder code { background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 11.5px; color: var(--teal-dark); display: inline-block; margin-top: 6px; }
 
-    /* ── Chat panel ── */
-    #panel-chat { background: #fff; }
+    /* ══════════════════════════════════
+       CHAT WIDGET FLOTANTE
+    ══════════════════════════════════ */
 
-    /* chat subheader */
-    .chat-subheader {
-      background: var(--teal); padding: 8px 16px;
+    /* FAB */
+    #chat-fab {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 54px; height: 54px; border-radius: 50%;
+      background: var(--teal); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,164,153,.45);
+      z-index: 8000; transition: transform .2s, background .2s;
+    }
+    #chat-fab:hover { background: var(--teal-dark); transform: scale(1.08); }
+    #chat-fab svg   { width: 24px; height: 24px; }
+    #fab-dot {
+      position: absolute; top: 4px; right: 4px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #e74c3c; border: 2px solid #fff; display: none;
+    }
+
+    /* POPUP */
+    #chat-popup {
+      position: fixed;
+      bottom: 90px; right: 24px;
+      width: 370px; height: 560px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.18);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      z-index: 7999;
+      transform: scale(.9) translateY(20px);
+      opacity: 0; pointer-events: none;
+      transition: transform .25s cubic-bezier(.34,1.56,.64,1), opacity .2s;
+    }
+    #chat-popup.open {
+      transform: scale(1) translateY(0);
+      opacity: 1; pointer-events: all;
+    }
+    /* MAXIMIZADO */
+    #chat-popup.maximized {
+      bottom: 0; right: 0;
+      width: 100vw; height: 100vh;
+      border-radius: 0;
+      transform: scale(1) translateY(0);
+    }
+
+    /* Chat header */
+    #chat-header {
+      background: var(--teal); padding: 10px 14px;
       display: flex; align-items: center; gap: 8px; flex-shrink: 0;
     }
-    .ch-dot { width: 5px; height: 5px; border-radius: 50%; background: #7fffda; animation: pulse 2.4s ease-in-out infinite; }
+    .ch-avatar { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,.25); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .ch-info h3 { font-size: 12.5px; font-weight: 700; color: #fff; margin: 0; }
+    .ch-info p  { font-size: 10px; color: rgba(255,255,255,.7); margin: 1px 0 0; }
+    .ch-dot { width: 5px; height: 5px; border-radius: 50%; background: #7fffda; animation: pulse 2.4s ease-in-out infinite; flex-shrink: 0; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-    .ch-label { font-size: 11px; color: rgba(255,255,255,.8); }
-    .ch-status { margin-left: auto; display: flex; align-items: center; gap: 4px; font-size: 10px; color: rgba(255,255,255,.7); }
+    .ch-actions { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+    .ch-btn {
+      background: rgba(255,255,255,.15); border: none; cursor: pointer;
+      color: #fff; width: 28px; height: 28px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .ch-btn:hover { background: rgba(255,255,255,.28); }
+    .ch-btn svg { width: 14px; height: 14px; }
 
-    #messages { flex: 1; overflow-y: auto; padding: 12px 16px 8px; display: flex; flex-direction: column; gap: 9px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
-    #messages::-webkit-scrollbar { width: 3px; }
-    #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    /* Messages */
+    #chat-messages {
+      flex: 1; overflow-y: auto; padding: 12px 14px 8px;
+      display: flex; flex-direction: column; gap: 9px;
+      scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+    }
+    #chat-messages::-webkit-scrollbar { width: 3px; }
+    #chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-    .row { display: flex; align-items: flex-end; gap: 6px; max-width: 82%; animation: fadeup .15s ease both; }
+    .row { display: flex; align-items: flex-end; gap: 6px; max-width: 88%; animation: fadeup .15s ease both; }
     @keyframes fadeup { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
     .row.bot  { align-self: flex-start; }
     .row.user { align-self: flex-end; flex-direction: row-reverse; }
@@ -163,7 +184,7 @@
     .av.user { background: var(--teal); color: #fff; overflow: hidden; }
     .av.user img { width: 100%; height: 100%; object-fit: cover; }
 
-    .bubble { padding: 8px 12px; border-radius: 14px; font-size: 12px; line-height: 1.55; max-width: 100%; word-break: break-word; }
+    .bubble { padding: 8px 12px; border-radius: 14px; font-size: 12.5px; line-height: 1.55; max-width: 100%; word-break: break-word; }
     .bubble.bot  { background: #f2f4f6; border: 1px solid var(--border); border-bottom-left-radius: 3px; color: var(--text-hi); }
     .bubble.user { background: var(--teal); border-bottom-right-radius: 3px; color: #fff; }
     .bubble table { border-collapse: collapse; width: 100%; margin-top: 5px; font-size: 11px; }
@@ -178,60 +199,54 @@
     .ts { font-size: 9.5px; color: var(--text-lo); margin-top: 2px; padding: 0 2px; }
     .row.user .ts { text-align: right; }
 
+    /* Typing */
     .typing-row { display: flex; align-items: flex-end; gap: 6px; align-self: flex-start; }
-    .typing-bub { background: #f2f4f6; border: 1px solid var(--border); border-radius: 14px; border-bottom-left-radius: 3px; padding: 9px 12px; display: flex; align-items: center; gap: 4px; }
+    .typing-bub { background: #f2f4f6; border: 1px solid var(--border); border-radius: 14px; border-bottom-left-radius: 3px; padding: 10px 13px; display: flex; align-items: center; gap: 4px; }
     .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); animation: bounce 1.3s ease-in-out infinite; }
     .dot:nth-child(2){animation-delay:.18s} .dot:nth-child(3){animation-delay:.36s}
     @keyframes bounce { 0%,80%,100%{transform:translateY(0);opacity:.3} 40%{transform:translateY(-4px);opacity:1} }
 
-    #suggestions { padding: 4px 16px 6px; display: flex; flex-wrap: wrap; gap: 5px; flex-shrink: 0; background: #fff; }
-    .chip { background: #fff; border: 1px solid var(--border-teal); color: var(--teal-dark); border-radius: 20px; padding: 4px 11px; font-size: 10.5px; font-family: var(--font); cursor: pointer; transition: background .15s, transform .1s; }
+    /* Suggestions */
+    #chat-suggs { padding: 4px 14px 6px; display: flex; flex-wrap: wrap; gap: 5px; flex-shrink: 0; background: #fff; }
+    .chip { background: #fff; border: 1px solid var(--border-teal); color: var(--teal-dark); border-radius: 20px; padding: 4px 10px; font-size: 10.5px; font-family: var(--font); cursor: pointer; transition: background .15s, transform .1s; }
     .chip:hover { background: var(--teal-light); transform: translateY(-1px); }
 
-    #input-area { background: #fff; border-top: 1px solid var(--border); padding: 10px 16px; display: flex; align-items: flex-end; gap: 8px; flex-shrink: 0; }
-    #user-input { flex: 1; background: #f7f9fa; border: 1px solid var(--border); border-radius: 18px; padding: 8px 13px; color: var(--text-hi); font-family: var(--font); font-size: 12px; resize: none; outline: none; max-height: 70px; overflow-y: auto; line-height: 1.4; transition: border-color .2s, box-shadow .2s; scrollbar-width: none; }
-    #user-input::-webkit-scrollbar { display: none; }
-    #user-input::placeholder { color: var(--text-lo); }
-    #user-input:focus { border-color: var(--teal); box-shadow: 0 0 0 2px var(--teal-glow); }
-    #send-btn { width: 34px; height: 34px; border-radius: 50%; background: var(--teal); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .15s, transform .1s, opacity .15s; }
-    #send-btn:hover:not(:disabled) { background: var(--teal-dark); transform: scale(1.06); }
-    #send-btn:disabled { opacity: .35; cursor: default; }
-    #send-btn svg { width: 14px; height: 14px; fill: #fff; }
+    /* Input */
+    #chat-input-area { background: #fff; border-top: 1px solid var(--border); padding: 10px 14px; display: flex; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+    #chat-input { flex: 1; background: #f7f9fa; border: 1px solid var(--border); border-radius: 18px; padding: 8px 13px; color: var(--text-hi); font-family: var(--font); font-size: 12.5px; resize: none; outline: none; max-height: 80px; overflow-y: auto; line-height: 1.4; transition: border-color .2s, box-shadow .2s; scrollbar-width: none; }
+    #chat-input::-webkit-scrollbar { display: none; }
+    #chat-input::placeholder { color: var(--text-lo); }
+    #chat-input:focus { border-color: var(--teal); box-shadow: 0 0 0 2px var(--teal-glow); }
+    #chat-send { width: 34px; height: 34px; border-radius: 50%; background: var(--teal); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .15s, transform .1s, opacity .15s; }
+    #chat-send:hover:not(:disabled) { background: var(--teal-dark); transform: scale(1.06); }
+    #chat-send:disabled { opacity: .35; cursor: default; }
+    #chat-send svg { width: 14px; height: 14px; fill: #fff; }
 
-    #empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; flex: 1; text-align: center; padding: 20px; color: var(--text-mid); }
+    /* Empty */
+    #chat-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; flex: 1; text-align: center; padding: 20px; color: var(--text-mid); }
     .empty-icon { width: 44px; height: 44px; background: var(--teal-light); border: 1px solid var(--border-teal); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
     .empty-icon svg { width: 20px; height: 20px; stroke: var(--teal); fill: none; }
-    #empty h2 { font-size: 13px; font-weight: 700; color: var(--text-hi); }
-    #empty p  { font-size: 11.5px; max-width: 220px; line-height: 1.5; }
+    #chat-empty h2 { font-size: 13px; font-weight: 700; color: var(--text-hi); }
+    #chat-empty p  { font-size: 11.5px; max-width: 220px; line-height: 1.5; }
 
-    #toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: #c0392b; color: #fff; font-size: 11px; padding: 6px 14px; border-radius: 20px; opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 99; }
+    #toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: #c0392b; color: #fff; font-size: 11px; padding: 6px 14px; border-radius: 20px; opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 99999; }
     #toast.show { opacity: 1; }
-
-    @media (max-width: 600px) {
-      .kpi-row { grid-template-columns: repeat(2, 1fr); }
-      nav { padding: 0 14px; }
-      .nav-tabs { gap: 0; margin-left: 10px; }
-      .nav-tab { padding: 5px 10px; font-size: 11px; }
-    }
   </style>
 </head>
 <body>
 
 <script>
-  // ══════════════════════════════════════════════════════
-  //  🔧 CONFIGURACIÓN — editá estas líneas
-  // ══════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════
+  //  🔧 CONFIGURACIÓN
+  // ══════════════════════════════════════════════
   const N8N_WEBHOOK_URL   = "https://n8nappv2.ocasa.com:5688/webhook-test/e54b71d9-4766-4f96-9282-945fae2faf42";
   const GOOGLE_CLIENT_ID  = "21974414254-r65b0airn5eoabkbqf5t7j0bsk2en0us.apps.googleusercontent.com";
   const DOMINIO_PERMITIDO = "ocasa.com";
-
-  // Power BI: pegá la URL del iframe que te da "Publicar en la web"
-  // Ejemplo: "https://app.powerbi.com/view?r=eyJ..."
   const POWERBI_EMBED_URL = "https://app.powerbi.com/view?r=eyJrIjoiNjAwOWQ3ZmQtYmM2OC00ODYyLWEyYTQtNWZiNzAwN2E5ODM2IiwidCI6IjkxYTViNWM4LTY3M2UtNGE4MC04NzFjLTVlZDM0MTJkZDQ1MSJ9";
-  // ══════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════
 </script>
 
-<!-- LOGIN -->
+<!-- ══ LOGIN ══ -->
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo">OC</div>
@@ -239,216 +254,238 @@
     <p>Portal de datos OCASA.<br>Iniciá sesión con tu cuenta corporativa.</p>
     <div class="login-divider"><span>Continuar con Google</span></div>
     <div id="google-btn-wrapper"></div>
-    <div id="login-error">⚠️ Solo se permite el acceso con cuentas <strong>@ocasa.com</strong>.</div>
+    <button id="google-custom-btn" onclick="triggerGoogleLogin()">
+      <svg width="18" height="18" viewBox="0 0 48 48">
+        <path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/>
+        <path fill="#34A853" d="M6.3 14.7l7 5.1C15.1 16 19.2 13 24 13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 16.3 2 9.7 7.4 6.3 14.7z"/>
+        <path fill="#FBBC05" d="M24 46c5.9 0 10.9-2 14.5-5.4l-6.7-5.5C29.9 36.8 27.1 38 24 38c-6.1 0-10.7-3.9-11.8-9.1l-7 5.4C8.6 41.4 15.7 46 24 46z"/>
+        <path fill="#EA4335" d="M44.5 20H24v8.5h11.8c-1 3-3.2 5.5-6.1 7.1l6.7 5.5C40.5 37.8 44 31.5 44 24c0-1.3-.2-2.7-.5-4z"/>
+      </svg>
+      Iniciar sesión con Google
+    </button>
+    <div id="login-error">⚠️ Solo se permite acceso con cuentas <strong>@ocasa.com</strong>.</div>
     <div class="login-footer">Gerencia CX · Customer Intelligence<br>Uso interno — información confidencial</div>
   </div>
 </div>
 
-<!-- NAV -->
+<!-- ══ NAV ══ -->
 <nav>
-  <div class="nav-brand">
-    <div class="nav-logo">OC</div>
-    <div>
-      <div class="nav-title">Customer Intelligence</div>
-      <div class="nav-sub">Gerencia CX</div>
-    </div>
-  </div>
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
-    <button class="nav-tab" onclick="switchTab('chat', this)">💬 Asistente</button>
+  <div class="nav-logo">OC</div>
+  <div>
+    <div class="nav-title">Customer Intelligence</div>
+    <div class="nav-sub">Gerencia CX</div>
   </div>
   <div class="nav-right">
     <div id="user-pill">
       <img id="user-avatar" src="" alt=""/>
       <span id="user-name"></span>
-      <button id="logout-btn" onclick="logout()">Salir</button>
+      <button id="logout-btn" onclick="doLogout()">Salir</button>
     </div>
   </div>
 </nav>
 
-<!-- APP -->
-<div id="app">
+<!-- ══ POWER BI FULL ══ -->
+<div id="pbi-wrap">
+  <div class="pbi-placeholder" id="pbi-placeholder">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+      <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+    </svg>
+    <h3>Tablero Power BI</h3>
+    <p>Configurá la variable <code>POWERBI_EMBED_URL</code> para ver el reporte.</p>
+  </div>
+</div>
 
-  <!-- TAB: DASHBOARD -->
-  <div id="panel-dashboard" class="tab-panel active">
+<!-- ══ CHAT FAB ══ -->
+<button id="chat-fab" onclick="toggleChat()" title="Asistente OCASA">
+  <div id="fab-dot"></div>
+  <svg id="fab-icon-chat" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+  <svg id="fab-icon-close" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" style="display:none">
+    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>
+</button>
 
-    <div class="dash-header">
-      <div>
-        <div class="dash-title">Resumen Operativo</div>
-        <div class="dash-sub" id="dash-greeting">Bienvenido</div>
-      </div>
-      <div class="dash-badge" id="dash-date"></div>
+<!-- ══ CHAT POPUP ══ -->
+<div id="chat-popup">
+
+  <div id="chat-header">
+    <div class="ch-avatar">IA</div>
+    <div class="ch-info">
+      <h3>Asistente de Datos</h3>
+      <p>Customer Intelligence · OCASA</p>
     </div>
-
-    <!-- KPIs estáticos de ejemplo — reemplazá con datos reales -->
-    <div class="kpi-row">
-      <div class="kpi-card">
-        <div class="kpi-label">SLA Semana</div>
-        <div class="kpi-value">—<span>%</span></div>
-        <div class="kpi-delta">Cargando datos…</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Efectividad</div>
-        <div class="kpi-value">—<span>%</span></div>
-        <div class="kpi-delta">Cargando datos…</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Paquetes Hoy</div>
-        <div class="kpi-value">—</div>
-        <div class="kpi-delta">Cargando datos…</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Backlog</div>
-        <div class="kpi-value">—</div>
-        <div class="kpi-delta">Cargando datos…</div>
-      </div>
-    </div>
-
-    <!-- Power BI embed -->
-    <div class="pbi-section">
-      <div class="section-label">Tablero Power BI</div>
-      <div class="pbi-card" id="pbi-container">
-        <!-- Se reemplaza dinámicamente si hay POWERBI_EMBED_URL -->
-        <div class="pbi-placeholder" id="pbi-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
-          </svg>
-          <h3>Tablero Power BI</h3>
-          <p>Pegá la URL de embed en la variable <code>POWERBI_EMBED_URL</code> del archivo.</p>
-          <code>Archivo → Publicar en la web → iframe → copiá la src URL</code>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /panel-dashboard -->
-
-  <!-- TAB: CHAT -->
-  <div id="panel-chat" class="tab-panel">
-
-    <div class="chat-subheader">
-      <span class="ch-dot"></span>
-      <span class="ch-label">Asistente de Datos · conectado a SQL Server OCASA</span>
-      <div class="ch-status">
-        <span id="chat-user-label"></span>
-      </div>
-    </div>
-
-    <div id="messages">
-      <div id="empty">
-        <div class="empty-icon">
-          <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
-        </div>
-        <h2>¿En qué puedo ayudarte?</h2>
-        <p>Preguntame sobre SLA, efectividad, backlog o cualquier métrica operativa.</p>
-      </div>
-    </div>
-
-    <div id="suggestions">
-      <button class="chip" onclick="suggest(this)">SLA esta semana</button>
-      <button class="chip" onclick="suggest(this)">Efectividad por sucursal</button>
-      <button class="chip" onclick="suggest(this)">Top clientes este mes</button>
-      <button class="chip" onclick="suggest(this)">Backlog actual</button>
-      <button class="chip" onclick="suggest(this)">Evolutivo últimas 8 semanas</button>
-    </div>
-
-    <div id="input-area">
-      <textarea id="user-input" rows="1" placeholder="Escribí tu pregunta..." autocomplete="off"></textarea>
-      <button id="send-btn" onclick="sendMessage()" disabled>
-        <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+    <span class="ch-dot"></span>
+    <div class="ch-actions">
+      <!-- Maximizar -->
+      <button class="ch-btn" onclick="toggleMaximize()" title="Maximizar">
+        <svg id="icon-maximize" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/>
+        </svg>
+        <svg id="icon-restore" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none">
+          <path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 0 2 2v3M16 21v-3a2 2 0 0 0 2-2h3"/>
+        </svg>
+      </button>
+      <!-- Cerrar -->
+      <button class="ch-btn" onclick="toggleChat()" title="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
       </button>
     </div>
+  </div>
 
-  </div><!-- /panel-chat -->
+  <div id="chat-messages">
+    <div id="chat-empty">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <h2>¿En qué puedo ayudarte?</h2>
+      <p>Preguntame sobre SLA, efectividad, backlog o cualquier métrica operativa.</p>
+    </div>
+  </div>
 
-</div><!-- /app -->
+  <div id="chat-suggs">
+    <button class="chip" onclick="suggest(this)">SLA esta semana</button>
+    <button class="chip" onclick="suggest(this)">Efectividad por sucursal</button>
+    <button class="chip" onclick="suggest(this)">Top clientes este mes</button>
+    <button class="chip" onclick="suggest(this)">Evolutivo 8 semanas</button>
+  </div>
+
+  <div id="chat-input-area">
+    <textarea id="chat-input" rows="1" placeholder="Escribí tu pregunta..." autocomplete="off"></textarea>
+    <button id="chat-send" onclick="sendMessage()" disabled>
+      <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+    </button>
+  </div>
+
+</div><!-- /chat-popup -->
 
 <div id="toast"></div>
 
 <script>
+  // ── Estado ─────────────────────────────────────
   const sessionId = crypto.randomUUID();
   let isWaiting   = false;
+  let chatOpen    = false;
+  let maximized   = false;
   let currentUser = null;
 
-  const msgsEl   = document.getElementById('messages');
-  const inputEl  = document.getElementById('user-input');
-  const sendBtn  = document.getElementById('send-btn');
-  const suggsEl  = document.getElementById('suggestions');
-  const emptyEl  = document.getElementById('empty');
-  const toastEl  = document.getElementById('toast');
-  const loginEl  = document.getElementById('login-screen');
+  // ── DOM ────────────────────────────────────────
+  const loginEl   = document.getElementById('login-screen');
+  const popup     = document.getElementById('chat-popup');
+  const msgsEl    = document.getElementById('chat-messages');
+  const inputEl   = document.getElementById('chat-input');
+  const sendBtn   = document.getElementById('chat-send');
+  const suggsEl   = document.getElementById('chat-suggs');
+  const emptyEl   = document.getElementById('chat-empty');
+  const toastEl   = document.getElementById('toast');
+  const fabDot    = document.getElementById('fab-dot');
 
-  // ── Fecha en header ──
-  document.getElementById('dash-date').textContent =
-    new Date().toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
-
-  // ── Power BI embed dinámico ──
-  // ── Power BI embed dinámico ──
+  // ── Power BI ───────────────────────────────────
   if (POWERBI_EMBED_URL) {
-    const container = document.getElementById("pbi-container");
-    container.innerHTML = `<iframe src="${POWERBI_EMBED_URL}" frameborder="0" allowfullscreen="true" style="width:100%;height:480px;border:none;display:block;"></iframe>`;
+    document.getElementById('pbi-wrap').innerHTML =
+      `<iframe src="${POWERBI_EMBED_URL}" allowfullscreen="true" style="width:100%;height:100%;border:none;display:block;"></iframe>`;
   }
 
-  // ── Google OAuth init ──
+  // ── Google Auth init ───────────────────────────
   function initGoogleAuth() {
-    const saved = sessionStorage.getItem("ocasa_user");
+    const saved = sessionStorage.getItem('ocasa_user');
     if (saved) { currentUser = JSON.parse(saved); onLoginSuccess(currentUser); return; }
-    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleLogin, ux_mode: "popup" });
+
+    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredential, ux_mode: 'popup' });
     google.accounts.id.renderButton(
-      document.getElementById("google-btn-wrapper"),
-      { theme: "outline", size: "large", text: "signin_with", shape: "rectangular", width: 260 }
+      document.getElementById('google-btn-wrapper'),
+      { theme: 'outline', size: 'large', text: 'signin_with', shape: 'rectangular', width: 260 }
     );
     google.accounts.id.prompt();
   }
 
-  if (typeof google !== "undefined") {
+  if (typeof google !== 'undefined') {
     initGoogleAuth();
   } else {
     window.onGoogleLibraryLoad = initGoogleAuth;
-    window.addEventListener("load", () => { if (typeof google !== "undefined" && !currentUser) initGoogleAuth(); });
+    window.addEventListener('load', () => { if (typeof google !== 'undefined' && !currentUser) initGoogleAuth(); });
   }
 
-  // ── Google OAuth ──
-  function handleGoogleLogin(response) {
+  // Callback credential (botón renderizado por Google)
+  function handleCredential(response) {
     const payload = JSON.parse(atob(response.credential.split('.')[1]));
     const domain  = (payload.email || '').split('@')[1] || '';
     if (domain !== DOMINIO_PERMITIDO) {
       document.getElementById('login-error').classList.add('show');
-      google.accounts.id.disableAutoSelect();
-      return;
+      google.accounts.id.disableAutoSelect(); return;
     }
     currentUser = { name: payload.name, email: payload.email, picture: payload.picture };
     sessionStorage.setItem('ocasa_user', JSON.stringify(currentUser));
     onLoginSuccess(currentUser);
   }
 
+  // Botón custom → OAuth2 token flow
+  function triggerGoogleLogin() {
+    const client = google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID,
+      scope: 'email profile',
+      callback: (tokenResp) => {
+        if (!tokenResp.access_token) return;
+        fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: 'Bearer ' + tokenResp.access_token }
+        }).then(r => r.json()).then(info => {
+          const domain = (info.email || '').split('@')[1] || '';
+          if (domain !== DOMINIO_PERMITIDO) {
+            document.getElementById('login-error').classList.add('show'); return;
+          }
+          currentUser = { name: info.name, email: info.email, picture: info.picture };
+          sessionStorage.setItem('ocasa_user', JSON.stringify(currentUser));
+          onLoginSuccess(currentUser);
+        });
+      }
+    });
+    client.requestAccessToken();
+  }
+
   function onLoginSuccess(user) {
     loginEl.classList.add('hidden');
     setTimeout(() => loginEl.style.display = 'none', 300);
-
     document.getElementById('user-avatar').src = user.picture || '';
     document.getElementById('user-name').textContent = user.name.split(' ')[0];
     document.getElementById('user-pill').style.display = 'flex';
-    document.getElementById('dash-greeting').textContent = `Hola, ${user.name.split(' ')[0]} · ${user.email}`;
-    document.getElementById('chat-user-label').textContent = user.name.split(' ')[0];
+    // Saludo inicial en el chat
+    setTimeout(() => appendBot(`¡Hola, ${user.name.split(' ')[0]}! 👋 Soy el asistente de datos de OCASA. Preguntame lo que necesites.`, null), 400);
+    // Mostrar dot después de 3s
+    setTimeout(() => { if (!chatOpen) fabDot.style.display = 'block'; }, 3000);
   }
 
-  function logout() { sessionStorage.removeItem('ocasa_user'); google.accounts.id.disableAutoSelect(); location.reload(); }
-
-  // ── Tabs ──
-  function switchTab(id, btn) {
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-    document.getElementById('panel-' + id).classList.add('active');
-    btn.classList.add('active');
-    if (id === 'chat') setTimeout(() => inputEl.focus(), 100);
+  function doLogout() {
+    sessionStorage.removeItem('ocasa_user');
+    if (typeof google !== 'undefined') google.accounts.id.disableAutoSelect();
+    location.reload();
   }
 
-  // ── Input ──
+  // ── Chat toggle ────────────────────────────────
+  function toggleChat() {
+    chatOpen = !chatOpen;
+    popup.classList.toggle('open', chatOpen);
+    document.getElementById('fab-icon-chat').style.display  = chatOpen ? 'none'  : 'block';
+    document.getElementById('fab-icon-close').style.display = chatOpen ? 'block' : 'none';
+    fabDot.style.display = 'none';
+    if (chatOpen) setTimeout(() => inputEl.focus(), 280);
+  }
+
+  // ── Maximizar ──────────────────────────────────
+  function toggleMaximize() {
+    maximized = !maximized;
+    popup.classList.toggle('maximized', maximized);
+    document.getElementById('icon-maximize').style.display = maximized ? 'none'  : 'block';
+    document.getElementById('icon-restore').style.display  = maximized ? 'block' : 'none';
+  }
+
+  // ── Input ──────────────────────────────────────
   inputEl.addEventListener('input', () => {
     inputEl.style.height = 'auto';
-    inputEl.style.height = Math.min(inputEl.scrollHeight, 70) + 'px';
+    inputEl.style.height = Math.min(inputEl.scrollHeight, 80) + 'px';
     sendBtn.disabled = inputEl.value.trim() === '' || isWaiting;
   });
   inputEl.addEventListener('keydown', e => {
@@ -456,11 +493,11 @@
   });
 
   function suggest(btn) {
-    switchTab('chat', document.querySelector('.nav-tab:nth-child(2)'));
-    setTimeout(() => { inputEl.value = btn.textContent; sendMessage(); }, 120);
+    if (!chatOpen) toggleChat();
+    setTimeout(() => { inputEl.value = btn.textContent; inputEl.dispatchEvent(new Event('input')); sendMessage(); }, 120);
   }
 
-  // ── Send ──
+  // ── Send ───────────────────────────────────────
   async function sendMessage() {
     const text = inputEl.value.trim();
     if (!text || isWaiting || !currentUser) return;
@@ -494,6 +531,7 @@
     inputEl.focus();
   }
 
+  // ── Render ─────────────────────────────────────
   function appendUser(text) {
     const row = document.createElement('div'); row.className = 'row user';
     const av  = document.createElement('div'); av.className = 'av user';
