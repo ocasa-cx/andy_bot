@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OCASA · Customer Intelligence</title>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://accounts.google.com/gsi/client"></script>
   <style>
     :root {
       --teal:        #00A499;
@@ -384,26 +384,30 @@
     new Date().toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
 
   // ── Power BI embed dinámico ──
-  window.addEventListener('DOMContentLoaded', () => {
-    if (POWERBI_EMBED_URL) {
-      const container = document.getElementById('pbi-container');
-      container.innerHTML = `<iframe src="${POWERBI_EMBED_URL}" frameborder="0" allowfullscreen="true" style="width:100%;height:480px;border:none;display:block;"></iframe>`;
-    }
+  // ── Power BI embed dinámico ──
+  if (POWERBI_EMBED_URL) {
+    const container = document.getElementById("pbi-container");
+    container.innerHTML = `<iframe src="${POWERBI_EMBED_URL}" frameborder="0" allowfullscreen="true" style="width:100%;height:480px;border:none;display:block;"></iframe>`;
+  }
 
-    // Sesión guardada
-    const saved = sessionStorage.getItem('ocasa_user');
-    if (saved) {
-      currentUser = JSON.parse(saved);
-      onLoginSuccess(currentUser);
-      return;
-    }
-
-    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleLogin });
+  // ── Google OAuth init ──
+  function initGoogleAuth() {
+    const saved = sessionStorage.getItem("ocasa_user");
+    if (saved) { currentUser = JSON.parse(saved); onLoginSuccess(currentUser); return; }
+    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleLogin, ux_mode: "popup" });
     google.accounts.id.renderButton(
-      document.getElementById('google-btn-wrapper'),
-      { theme: 'outline', size: 'large', text: 'signin_with', shape: 'rectangular', width: 260 }
+      document.getElementById("google-btn-wrapper"),
+      { theme: "outline", size: "large", text: "signin_with", shape: "rectangular", width: 260 }
     );
-  });
+    google.accounts.id.prompt();
+  }
+
+  if (typeof google !== "undefined") {
+    initGoogleAuth();
+  } else {
+    window.onGoogleLibraryLoad = initGoogleAuth;
+    window.addEventListener("load", () => { if (typeof google !== "undefined" && !currentUser) initGoogleAuth(); });
+  }
 
   // ── Google OAuth ──
   function handleGoogleLogin(response) {
