@@ -418,7 +418,7 @@
     appendUser(text);
     inputEl.value = ''; inputEl.style.height = 'auto';
     sendBtn.disabled = true; isWaiting = true;
-    const tid = showTyping();
+    const tid = showTyping(text);
     try {
       const res = await fetch(N8N_WEBHOOK_URL, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -486,10 +486,37 @@
     msgsEl.appendChild(row); scroll();
   }
 
-  function showTyping() {
-    const id = 't' + Date.now();
+  function getStatusMessage(text) {
+    const t = (text || '').toLowerCase();
+    if (t.includes('sla'))                                    return 'Calculando SLA desde el Data Warehouse...';
+    if (t.includes('backlog'))                                return 'Consultando backlog acumulado...';
+    if (t.includes('efectividad'))                            return 'Analizando efectividad de entregas...';
+    if (t.includes('nps'))                                    return 'Consultando datos de NPS...';
+    if (t.includes('motivo') || t.includes('no entrega'))     return 'Analizando motivos de no entrega...';
+    if (t.includes('correlaci'))                              return 'Calculando correlación entre variables...';
+    if (t.includes('evolu') || t.includes('histor') || t.includes('trend') || t.includes('último') || t.includes('ultim')) return 'Generando evolutivo histórico...';
+    if (t.includes('excel') || t.includes('export') || t.includes('descarg') || t.includes('detalle')) return 'Preparando archivo para descarga...';
+    if (t.includes('grafico') || t.includes('gráfico') || t.includes('chart')) return 'Generando visualización...';
+    if (t.includes('causa') || t.includes('por qué') || t.includes('por que') || t.includes('análisis') || t.includes('analisis')) return 'Analizando posibles causas...';
+    if (t.includes('volumen') || t.includes('desvio') || t.includes('desvío')) return 'Calculando volumen y desvíos...';
+    if (t.includes('vencid') || t.includes('fuera de sla'))   return 'Buscando piezas fuera de SLA...';
+    if (t.includes('sucursal') || t.includes('iata'))         return 'Consultando datos por sucursal...';
+    if (t.includes('cliente'))                                return 'Consultando datos por cliente...';
+    return 'Consultando la base de datos de OCASA...';
+  }
+
+  function showTyping(userText) {
+    const id  = 't' + Date.now();
+    const msg = getStatusMessage(userText);
     const row = document.createElement('div'); row.className = 'typing-row'; row.id = id;
-    row.innerHTML = `<div class="av bot">IA</div><div class="typing-bub"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
+    row.innerHTML = `
+      <div class="av bot">IA</div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <div class="typing-bub">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+        <span style="font-size:10px;color:var(--text-lo);padding-left:4px;">${msg}</span>
+      </div>`;
     msgsEl.appendChild(row); scroll(); return id;
   }
   function removeTyping(id) { const el = document.getElementById(id); if (el) el.remove(); }
