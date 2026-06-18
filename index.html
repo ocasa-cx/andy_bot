@@ -12,7 +12,6 @@
       --text-hi:#1a2733; --text-mid:#637480; --text-lo:#a0b0bc;
       --border:#e4e9ed; --border-teal:rgba(0,164,153,.22);
       --font:'Segoe UI',system-ui,sans-serif;
-      /* widget dimensions — responsive */
       --chat-w: clamp(300px, 90vw, 400px);
       --chat-h: clamp(400px, 70vh, 580px);
       --fab-b: 24px; --fab-r: 24px;
@@ -65,7 +64,7 @@
     #chat-fab svg { width:22px; height:22px; }
     #fab-dot { position:absolute; top:4px; right:4px; width:10px; height:10px; border-radius:50%; background:#e74c3c; border:2px solid #fff; display:none; }
 
-    /* ── POPUP — responsive ── */
+    /* ── POPUP ── */
     #chat-popup {
       position:fixed;
       bottom:calc(var(--fab-b) + 64px);
@@ -83,16 +82,12 @@
       transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .2s;
     }
     #chat-popup.open { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
-
-    /* Maximizado */
     #chat-popup.maximized {
       bottom:0 !important; right:0 !important;
       width:100vw !important; height:calc(100vh - 48px) !important;
       border-radius:0;
       transform:scale(1) translateY(0) !important;
     }
-
-    /* En pantallas muy pequeñas el popup ocupa toda la pantalla */
     @media (max-width:480px),(max-height:600px) {
       #chat-popup.open:not(.maximized) {
         bottom:0 !important; right:0 !important;
@@ -137,9 +132,9 @@
     .bubble tr:nth-child(even) td { background:#fafbfc; }
     .bubble pre { background:#f0f3f5; border-radius:5px; padding:6px 8px; font-size:10.5px; overflow-x:auto; margin-top:5px; font-family:monospace; }
 
-    /* Chart / Excel card */
+    /* Chart card */
     .chart-card { margin-top:6px; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:#fff; }
-    .chart-card iframe { width:100%; border:none; display:block; min-height:200px; }
+    .chart-card iframe { width:100%; border:none; display:block; min-height:400px; }
 
     .ts { font-size:9.5px; color:var(--text-lo); margin-top:2px; padding:0 2px; }
     .row.user .ts { text-align:right; }
@@ -466,7 +461,7 @@
       const card   = document.createElement('div'); card.className = 'chart-card';
       const iframe = document.createElement('iframe');
       iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-downloads');
-      iframe.style.cssText = 'width:100%;border:none;display:block;min-height:200px;';
+      iframe.style.cssText = 'width:100%;border:none;display:block;min-height:400px;';
       card.appendChild(iframe); inn.appendChild(card);
       requestAnimationFrame(() => {
         iframe.contentDocument.open();
@@ -475,7 +470,7 @@
         iframe.onload = () => {
           try {
             const h = iframe.contentDocument.body.scrollHeight;
-            if (h > 80) iframe.style.height = Math.min(h + 8, 520) + 'px';
+            if (h > 80) iframe.style.height = Math.min(h + 16, 2400) + 'px';
           } catch(e) {}
         };
       });
@@ -502,6 +497,7 @@
     if (t.includes('vencid') || t.includes('fuera de sla'))   return 'Buscando piezas fuera de SLA...';
     if (t.includes('sucursal') || t.includes('iata'))         return 'Consultando datos por sucursal...';
     if (t.includes('cliente'))                                return 'Consultando datos por cliente...';
+    if (t.includes('dolor') || t.includes('queja') || t.includes('detractor')) return 'Analizando mensajes de detractores...';
     return 'Consultando la base de datos de OCASA...';
   }
 
