@@ -176,7 +176,7 @@
 <body>
 
 <script>
-  const N8N_WEBHOOK_URL   = "https://n8nappv2.ocasa.com:5688/webhook-test/e54b71d9-4766-4f96-9282-945fae2faf42";
+  const N8N_WEBHOOK_URL   = "https://n8nappv2.ocasa.com:5688/webhook/e54b71d9-4766-4f96-9282-945fae2faf42";
   const GOOGLE_CLIENT_ID  = "21974414254-r65b0airn5eoabkbqf5t7j0bsk2en0us.apps.googleusercontent.com";
   const DOMINIO_PERMITIDO = "ocasa.com";
   const POWERBI_EMBED_URL = "https://app.powerbi.com/view?r=eyJrIjoiNjAwOWQ3ZmQtYmM2OC00ODYyLWEyYTQtNWZiNzAwN2E5ODM2IiwidCI6IjkxYTViNWM4LTY3M2UtNGE4MC04NzFjLTVlZDM0MTJkZDQ1MSJ9";
@@ -454,7 +454,7 @@
       appendBot(reply, html);
     } catch(err) {
       removeTyping(tid);
-      appendBot('⚠️ No se pudo conectar. Verificá el webhook o intentá más tarde.', null);
+      appendBot('⚠️ No se pudo conectara la base. Verificá el Prompt o intentá más tarde.', null);
       showToast('Error de conexión');
     }
     isWaiting = false;
