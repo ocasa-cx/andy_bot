@@ -126,6 +126,16 @@
     .bubble { padding:7px 11px; border-radius:13px; font-size:12px; line-height:1.55; max-width:100%; word-break:break-word; }
     .bubble.bot  { background:#f2f4f6; border:1px solid var(--border); border-bottom-left-radius:3px; color:var(--text-hi); }
     .bubble.user { background:var(--teal); border-bottom-right-radius:3px; color:#fff; }
+
+    /* Burbuja provisoria — estilo distinto para diferenciarla */
+    .bubble.provisional {
+      background:#fffbea;
+      border:1px dashed #f0c040;
+      color:var(--text-mid);
+      font-style:italic;
+      font-size:11.5px;
+    }
+
     .bubble table { border-collapse:collapse; width:100%; margin-top:5px; font-size:11px; }
     .bubble th { background:#e6f7f6; color:var(--teal-dark); padding:4px 7px; text-align:left; font-weight:700; border:1px solid var(--border-teal); }
     .bubble td { padding:3px 7px; border:1px solid var(--border); }
@@ -147,7 +157,19 @@
     @keyframes bounce { 0%,80%,100%{transform:translateY(0);opacity:.3} 40%{transform:translateY(-4px);opacity:1} }
 
     /* Suggestions */
-    #chat-suggs { padding:4px 12px 5px; display:flex; flex-wrap:wrap; gap:5px; flex-shrink:0; background:#fff; }
+    #chat-suggs {
+      padding:6px 10px 7px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:5px;
+      flex-shrink:0;
+      background:#fff;
+      border-top:1px solid var(--border);
+      max-height:90px;
+      overflow-y:auto;
+      scrollbar-width:none;
+    }
+    #chat-suggs::-webkit-scrollbar { display:none; }
     .chip { background:#fff; border:1px solid var(--border-teal); color:var(--teal-dark); border-radius:20px; padding:4px 9px; font-size:10.5px; font-family:var(--font); cursor:pointer; transition:background .15s,transform .1s; white-space:nowrap; }
     .chip:hover { background:var(--teal-light); transform:translateY(-1px); }
 
@@ -192,7 +214,7 @@
     <div id="google-btn-wrapper"></div>
     <button id="google-custom-btn" onclick="triggerGoogleLogin()">
       <svg width="18" height="18" viewBox="0 0 48 48">
-        <path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/>
+        <path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 37 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/>
         <path fill="#34A853" d="M6.3 14.7l7 5.1C15.1 16 19.2 13 24 13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 16.3 2 9.7 7.4 6.3 14.7z"/>
         <path fill="#FBBC05" d="M24 46c5.9 0 10.9-2 14.5-5.4l-6.7-5.5C29.9 36.8 27.1 38 24 38c-6.1 0-10.7-3.9-11.8-9.1l-7 5.4C8.6 41.4 15.7 46 24 46z"/>
         <path fill="#EA4335" d="M44.5 20H24v8.5h11.8c-1 3-3.2 5.5-6.1 7.1l6.7 5.5C40.5 37.8 44 31.5 44 24c0-1.3-.2-2.7-.5-4z"/>
@@ -272,15 +294,21 @@
         <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       </div>
       <h2>¿En qué puedo ayudarte?</h2>
-      <p>Preguntame sobre SLA, efectividad, backlog o métricas operativas.</p>
+      <p>Preguntame sobre SLA, efectividad, backlog, NPS o métricas operativas.</p>
     </div>
   </div>
 
   <div id="chat-suggs">
-    <button class="chip" onclick="suggest(this)">SLA esta semana</button>
-    <button class="chip" onclick="suggest(this)">Efectividad por sucursal</button>
-    <button class="chip" onclick="suggest(this)">Top clientes</button>
-    <button class="chip" onclick="suggest(this)">Backlog por IATA</button>
+    <button class="chip" onclick="suggest(this)">Impacto SLA por cliente semana pasada</button>
+    <button class="chip" onclick="suggest(this)">Impacto SLA por sucursal último mes</button>
+    <button class="chip" onclick="suggest(this)">Puntos de dolor del NPS mes pasado</button>
+    <button class="chip" onclick="suggest(this)">Motivos de no entrega semana pasada</button>
+    <button class="chip" onclick="suggest(this)">Efectividad 1ra visita por sucursal</button>
+    <button class="chip" onclick="suggest(this)">Backlog por IATA hoy</button>
+    <button class="chip" onclick="suggest(this)">Evolutivo SLA últimas 4 semanas</button>
+    <button class="chip" onclick="suggest(this)">NPS por sucursal este mes</button>
+    <button class="chip" onclick="suggest(this)">Top clientes por volumen</button>
+    <button class="chip" onclick="suggest(this)">Efectividad final por cliente</button>
   </div>
 
   <div id="chat-input-area">
@@ -313,7 +341,7 @@
       `<iframe src="${POWERBI_EMBED_URL}" allowfullscreen="true" style="width:100%;height:100%;border:none;display:block;"></iframe>`;
   }
 
-  // Google Auth
+  // ── Google Auth ──────────────────────────────────────────────────
   function initGoogleAuth() {
     const saved = sessionStorage.getItem('ocasa_user');
     if (saved) { currentUser = JSON.parse(saved); onLoginSuccess(currentUser); return; }
@@ -362,7 +390,7 @@
     document.getElementById('user-avatar').src = user.picture || '';
     document.getElementById('user-name').textContent = user.name.split(' ')[0];
     document.getElementById('user-pill').style.display = 'flex';
-    setTimeout(() => appendBot(`¡Hola, ${user.name.split(' ')[0]}! 👋 Soy el asistente de datos de OCASA. Preguntame lo que necesites.`, null), 400);
+    setTimeout(() => appendBot(`¡Hola, ${user.name.split(' ')[0]}! 👋 Soy el asistente de datos de OCASA. Podés preguntarme sobre SLA, efectividad, backlog, NPS, motivos de no entrega y más.`, null), 400);
     setTimeout(() => { if (!chatOpen) fabDot.style.display = 'block'; }, 3500);
   }
 
@@ -372,7 +400,7 @@
     location.reload();
   }
 
-  // Chat toggle
+  // ── Chat toggle ──────────────────────────────────────────────────
   function toggleChat() {
     chatOpen = !chatOpen;
     popup.classList.toggle('open', chatOpen);
@@ -389,11 +417,9 @@
         if (!doc || !doc.body) return;
         const h = doc.body.scrollHeight;
         if (h > 80) iframe.style.height = Math.min(h + 16, 2400) + 'px';
-        // Resize Chart.js instances si existen
         const win = iframe.contentWindow;
         if (win && win.Chart) {
-          const instances = win.Chart.instances || {};
-          Object.values(instances).forEach(chart => {
+          Object.values(win.Chart.instances || {}).forEach(chart => {
             try { chart.resize(); } catch(e) {}
           });
         }
@@ -406,17 +432,15 @@
     popup.classList.toggle('maximized', maximized);
     document.getElementById('icon-max').style.display     = maximized ? 'none'  : 'block';
     document.getElementById('icon-restore').style.display = maximized ? 'block' : 'none';
-    // Dar tiempo al CSS para aplicar el nuevo tamaño y luego redimensionar
     setTimeout(resizeAllIframes, 300);
   }
 
-  // Observar cambios de tamaño del popup para redimensionar iframes
   if (typeof ResizeObserver !== 'undefined') {
     const ro = new ResizeObserver(() => { if (maximized) setTimeout(resizeAllIframes, 100); });
     ro.observe(document.getElementById('chat-popup'));
   }
 
-  // Input
+  // ── Input ────────────────────────────────────────────────────────
   inputEl.addEventListener('input', () => {
     inputEl.style.height = 'auto';
     inputEl.style.height = Math.min(inputEl.scrollHeight, 70) + 'px';
@@ -431,37 +455,94 @@
     setTimeout(() => { inputEl.value = btn.textContent; inputEl.dispatchEvent(new Event('input')); sendMessage(); }, 150);
   }
 
-  // Send
+  // ── Mensaje provisorio según intención detectada localmente ──────
+  function getProvisionalMessage(text) {
+    const t = (text || '').toLowerCase();
+
+    if ((t.includes('impacto') || t.includes('quién') || t.includes('arrastr') || t.includes('target')) && t.includes('sla'))
+      return '📊 Entendido — voy a calcular el SLA y el impacto por dimensión. Esto puede tardar unos segundos...';
+    if ((t.includes('impacto') || t.includes('quién') || t.includes('arrastr')) && t.includes('efectividad'))
+      return '📊 Calculando efectividad con análisis de impacto...';
+    if (t.includes('puntos de dolor') || (t.includes('nps') && (t.includes('queja') || t.includes('detractor') || t.includes('dicen'))))
+      return '💬 Analizando mensajes y puntos de dolor del NPS. Un momento...';
+    if (t.includes('nps'))
+      return '⭐ Consultando datos de NPS...';
+    if (t.includes('motivo') && (t.includes('no entrega') || t.includes('falla') || t.includes('primera visita') || t.includes('1era')))
+      return '🔍 Analizando motivos de no entrega...';
+    if (t.includes('backlog'))
+      return '📦 Consultando backlog operativo...';
+    if (t.includes('efectividad'))
+      return '🚚 Calculando efectividad de entregas...';
+    if (t.includes('sla'))
+      return '📈 Consultando SLA desde el Data Warehouse...';
+    if (t.includes('evolu') || t.includes('histor') || t.includes('semanas') || t.includes('meses'))
+      return '📅 Generando evolutivo histórico...';
+    if (t.includes('excel') || t.includes('export') || t.includes('descarg') || t.includes('detalle'))
+      return '⬇️ Preparando datos para exportar...';
+    if (t.includes('causa') || t.includes('por qué') || t.includes('por que'))
+      return '🔎 Analizando posibles causas...';
+    if (t.includes('correlaci'))
+      return '🔗 Calculando correlación entre métricas...';
+    if (t.includes('sucursal') || t.includes('iata'))
+      return '🏢 Consultando datos por sucursal...';
+    if (t.includes('cliente'))
+      return '👤 Consultando datos por cliente...';
+
+    return '⚙️ Procesando tu consulta en el Data Warehouse...';
+  }
+
+  // ── Send ─────────────────────────────────────────────────────────
   async function sendMessage() {
     const text = inputEl.value.trim();
     if (!text || isWaiting || !currentUser) return;
-    if (emptyEl) emptyEl.remove();
+    if (emptyEl && emptyEl.parentNode) emptyEl.remove();
     suggsEl.style.display = 'none';
+
     appendUser(text);
     inputEl.value = ''; inputEl.style.height = 'auto';
     sendBtn.disabled = true; isWaiting = true;
-    const tid = showTyping(text);
+
+    // 1. Mostrar mensaje provisorio inmediato (antes de llamar a n8n)
+    const provisionalId = appendProvisional(getProvisionalMessage(text));
+
+    // 2. Mostrar typing debajo del provisorio
+    const tid = showTyping();
+
     try {
       const res = await fetch(N8N_WEBHOOK_URL, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, session_id: sessionId, timestamp: new Date().toISOString(), user_email: currentUser.email, user_name: currentUser.name })
+        body: JSON.stringify({
+          message:     text,
+          session_id:  sessionId,
+          timestamp:   new Date().toISOString(),
+          user_email:  currentUser.email,
+          user_name:   currentUser.name
+        })
       });
+
+      // 3. Remover provisorio y typing cuando llega la respuesta real
+      removeProvisional(provisionalId);
       removeTyping(tid);
+
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data  = await res.json();
       const reply = data.response ?? data.message ?? data.text ?? data.answer ?? 'Sin respuesta.';
       const html  = data.html ?? data.chart_html ?? null;
       appendBot(reply, html);
+
     } catch(err) {
+      removeProvisional(provisionalId);
       removeTyping(tid);
-      appendBot('⚠️ No se pudo conectara la base. Verificá el Prompt o intentá más tarde.', null);
+      appendBot('⚠️ No se pudo conectar a la base. Verificá el flujo o intentá más tarde.', null);
       showToast('Error de conexión');
     }
+
     isWaiting = false;
     sendBtn.disabled = inputEl.value.trim() === '';
     inputEl.focus();
   }
 
+  // ── Render helpers ───────────────────────────────────────────────
   function appendUser(text) {
     const row = document.createElement('div'); row.className = 'row user';
     const av  = document.createElement('div'); av.className = 'av user';
@@ -472,6 +553,23 @@
     const inn = document.createElement('div'); inn.style.cssText = 'display:flex;flex-direction:column;';
     inn.appendChild(bub); inn.appendChild(ts); row.appendChild(inn); row.appendChild(av);
     msgsEl.appendChild(row); scroll();
+  }
+
+  // Burbuja provisoria — aparece inmediato, se remueve cuando llega la respuesta real
+  function appendProvisional(text) {
+    const id  = 'prov_' + Date.now();
+    const row = document.createElement('div'); row.className = 'row bot'; row.id = id;
+    const av  = document.createElement('div'); av.className = 'av bot'; av.textContent = 'IA';
+    const bub = document.createElement('div'); bub.className = 'bubble bot provisional'; bub.textContent = text;
+    const inn = document.createElement('div'); inn.style.cssText = 'display:flex;flex-direction:column;';
+    inn.appendChild(bub); row.appendChild(av); row.appendChild(inn);
+    msgsEl.appendChild(row); scroll();
+    return id;
+  }
+
+  function removeProvisional(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
   }
 
   function appendBot(text, chartHtml) {
@@ -491,45 +589,27 @@
       iframe.style.cssText = 'width:100%;border:none;display:block;min-height:400px;';
       card.appendChild(iframe); inn.appendChild(card);
 
-      // CSS reset responsivo inyectado en el iframe
       const responsiveCSS = `<style>
         *, *::before, *::after { box-sizing: border-box !important; }
         html { overflow-x: hidden !important; }
-        body {
-          margin: 0 !important;
-          padding: 8px !important;
-          overflow-x: hidden !important;
-          max-width: 100vw !important;
-          word-break: break-word !important;
-        }
-        img, canvas, video, table { max-width: 100% !important; }
-        [style*="width:"] { max-width: 100% !important; }
+        body { margin:0 !important; padding:8px !important; overflow-x:hidden !important; max-width:100vw !important; word-break:break-word !important; }
+        img, canvas, video, table { max-width:100% !important; }
+        [style*="width:"] { max-width:100% !important; }
       </style>`;
 
-      // Inyectar CSS al inicio del <head> o del documento
       let fullHtml = chartHtml;
-      if (fullHtml.includes('</head>')) {
-        fullHtml = fullHtml.replace('</head>', responsiveCSS + '</head>');
-      } else {
-        fullHtml = responsiveCSS + fullHtml;
-      }
+      fullHtml = fullHtml.includes('</head>')
+        ? fullHtml.replace('</head>', responsiveCSS + '</head>')
+        : responsiveCSS + fullHtml;
 
       requestAnimationFrame(() => {
         iframe.contentDocument.open();
         iframe.contentDocument.write(fullHtml);
         iframe.contentDocument.close();
-        // Primera medición al cargar
         iframe.onload = () => {
-          try {
-            const h = iframe.contentDocument.body.scrollHeight;
-            if (h > 80) iframe.style.height = Math.min(h + 16, 2400) + 'px';
-          } catch(e) {}
-          // Segunda medición con delay para capturar Chart.js renderizado
+          try { const h = iframe.contentDocument.body.scrollHeight; if (h > 80) iframe.style.height = Math.min(h + 16, 2400) + 'px'; } catch(e) {}
           setTimeout(() => {
-            try {
-              const h2 = iframe.contentDocument.body.scrollHeight;
-              if (h2 > 80) iframe.style.height = Math.min(h2 + 16, 2400) + 'px';
-            } catch(e) {}
+            try { const h2 = iframe.contentDocument.body.scrollHeight; if (h2 > 80) iframe.style.height = Math.min(h2 + 16, 2400) + 'px'; } catch(e) {}
           }, 800);
         };
       });
@@ -540,37 +620,13 @@
     msgsEl.appendChild(row); scroll();
   }
 
-  function getStatusMessage(text) {
-    const t = (text || '').toLowerCase();
-    if (t.includes('sla'))                                                          return 'Calculando SLA desde el Data Warehouse...';
-    if (t.includes('backlog'))                                                      return 'Consultando backlog acumulado...';
-    if (t.includes('efectividad'))                                                  return 'Analizando efectividad de entregas...';
-    if (t.includes('nps'))                                                          return 'Consultando datos de NPS...';
-    if (t.includes('dolor') || t.includes('queja') || t.includes('detractor'))     return 'Analizando mensajes de detractores...';
-    if (t.includes('motivo') || t.includes('no entrega'))                           return 'Analizando motivos de no entrega...';
-    if (t.includes('correlaci'))                                                    return 'Calculando correlación entre variables...';
-    if (t.includes('evolu') || t.includes('histor') || t.includes('trend') || t.includes('último') || t.includes('ultim')) return 'Generando evolutivo histórico...';
-    if (t.includes('excel') || t.includes('export') || t.includes('descarg') || t.includes('detalle')) return 'Preparando archivo para descarga...';
-    if (t.includes('grafico') || t.includes('gráfico') || t.includes('chart'))     return 'Generando visualización...';
-    if (t.includes('causa') || t.includes('por qué') || t.includes('por que') || t.includes('análisis') || t.includes('analisis')) return 'Analizando posibles causas...';
-    if (t.includes('volumen') || t.includes('desvio') || t.includes('desvío'))     return 'Calculando volumen y desvíos...';
-    if (t.includes('vencid') || t.includes('fuera de sla'))                        return 'Buscando piezas fuera de SLA...';
-    if (t.includes('sucursal') || t.includes('iata'))                              return 'Consultando datos por sucursal...';
-    if (t.includes('cliente'))                                                      return 'Consultando datos por cliente...';
-    return 'Consultando la base de datos de OCASA...';
-  }
-
-  function showTyping(userText) {
+  function showTyping() {
     const id  = 't' + Date.now();
-    const msg = getStatusMessage(userText);
     const row = document.createElement('div'); row.className = 'typing-row'; row.id = id;
     row.innerHTML = `
       <div class="av bot">IA</div>
-      <div style="display:flex;flex-direction:column;gap:4px;">
-        <div class="typing-bub">
-          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-        </div>
-        <span style="font-size:10px;color:var(--text-lo);padding-left:4px;">${msg}</span>
+      <div class="typing-bub">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
       </div>`;
     msgsEl.appendChild(row); scroll(); return id;
   }
@@ -584,8 +640,8 @@
       .replace(/\n/g, '<br>');
   }
 
-  function scroll() { msgsEl.scrollTo({ top: msgsEl.scrollHeight, behavior: 'smooth' }); }
-  function now()    { return new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }); }
+  function scroll()    { msgsEl.scrollTo({ top: msgsEl.scrollHeight, behavior: 'smooth' }); }
+  function now()       { return new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }); }
   function showToast(msg) { toastEl.textContent = msg; toastEl.classList.add('show'); setTimeout(() => toastEl.classList.remove('show'), 3000); }
 </script>
 </body>
