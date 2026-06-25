@@ -7,10 +7,11 @@
   <script src="https://accounts.google.com/gsi/client"></script>
   <style>
     :root {
-      --teal:#00A499; --teal-dark:#007D74; --teal-light:#e6f7f6;
-      --teal-glow:rgba(0,164,153,.1); --navy:#0B1F3A; --bg:#f4f6f9;
+      --navy:#0B1F3A; --navy2:#162840;
+      --accent:#1c2333;
+      --bg:#f4f6f9;
       --text-hi:#1a2733; --text-mid:#637480; --text-lo:#a0b0bc;
-      --border:#e4e9ed; --border-teal:rgba(0,164,153,.22);
+      --border:#e4e9ed;
       --font:'Segoe UI',system-ui,sans-serif;
       --chat-w: clamp(300px, 90vw, 400px);
       --chat-h: clamp(400px, 70vh, 580px);
@@ -24,7 +25,8 @@
     #login-screen { position:fixed; inset:0; background:linear-gradient(135deg,#0B1F3A,#163055); display:flex; align-items:center; justify-content:center; z-index:9999; transition:opacity .3s; }
     #login-screen.hidden { opacity:0; pointer-events:none; }
     .login-card { background:#fff; border-radius:18px; padding:clamp(24px,5vw,40px) clamp(20px,5vw,36px); max-width:360px; width:90%; text-align:center; box-shadow:0 8px 48px rgba(0,0,0,.28); }
-    .login-logo { width:52px; height:52px; background:var(--teal); border-radius:14px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:18px; font-weight:700; color:#fff; }
+    .login-logo { width:52px; height:52px; background:var(--navy); border-radius:14px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; }
+    .login-logo svg { width:28px; height:28px; }
     .login-card h2 { font-size:clamp(15px,4vw,18px); font-weight:700; color:var(--text-hi); margin-bottom:6px; }
     .login-card p  { font-size:12px; color:var(--text-mid); margin-bottom:24px; line-height:1.6; }
     .login-divider { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
@@ -37,75 +39,55 @@
     #login-error.show { display:block; }
     .login-footer { margin-top:18px; font-size:10.5px; color:var(--text-lo); line-height:1.6; }
 
-    /* ── NAV ── */
-    nav { background:var(--navy); padding:0 16px; display:flex; align-items:center; gap:10px; height:48px; flex-shrink:0; }
-    .nav-logo { width:28px; height:28px; background:var(--teal); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; }
-    .nav-title { font-size:13px; font-weight:700; color:#fff; white-space:nowrap; }
-    .nav-sub   { font-size:10px; color:rgba(255,255,255,.45); }
+    /* ── NAV — compacto, sin texto en mobile ── */
+    nav { background:var(--navy); padding:0 16px; display:flex; align-items:center; gap:10px; height:44px; flex-shrink:0; }
+    .nav-logo { width:26px; height:26px; background:rgba(255,255,255,.12); border-radius:7px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .nav-logo svg { width:15px; height:15px; }
+    .nav-title { font-size:12px; font-weight:600; color:#fff; white-space:nowrap; }
+    .nav-sub   { font-size:9.5px; color:rgba(255,255,255,.4); }
     .nav-right { margin-left:auto; display:flex; align-items:center; gap:8px; flex-shrink:0; }
     #user-pill { display:none; align-items:center; gap:6px; }
-    #user-avatar { width:24px; height:24px; border-radius:50%; object-fit:cover; border:1.5px solid rgba(255,255,255,.3); }
-    #user-name   { font-size:11px; color:rgba(255,255,255,.75); max-width:clamp(60px,15vw,120px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    #logout-btn  { background:rgba(255,255,255,.1); border:none; cursor:pointer; color:rgba(255,255,255,.6); font-size:10.5px; border-radius:8px; padding:3px 8px; font-family:var(--font); transition:background .15s; white-space:nowrap; }
+    #user-avatar { width:22px; height:22px; border-radius:50%; object-fit:cover; border:1.5px solid rgba(255,255,255,.25); }
+    #user-name   { font-size:11px; color:rgba(255,255,255,.7); max-width:clamp(60px,15vw,120px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    #logout-btn  { background:rgba(255,255,255,.1); border:none; cursor:pointer; color:rgba(255,255,255,.6); font-size:10.5px; border-radius:6px; padding:3px 8px; font-family:var(--font); transition:background .15s; white-space:nowrap; }
     #logout-btn:hover { background:rgba(255,255,255,.2); }
 
-    /* ── POWER BI ── */
+    /* ── POWER BI — ocupa todo el espacio sin header extra ── */
     #pbi-wrap { flex:1; overflow:hidden; position:relative; }
     #pbi-wrap iframe { width:100%; height:100%; border:none; display:block; }
-    .pbi-placeholder { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:var(--text-mid); text-align:center; padding:20px; background:#f4f6f9; }
-    .pbi-placeholder svg { width:48px; height:48px; opacity:.25; }
-    .pbi-placeholder h3 { font-size:15px; font-weight:700; color:var(--text-hi); }
+    .pbi-placeholder { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:var(--text-mid); text-align:center; padding:20px; }
+    .pbi-placeholder svg { width:44px; height:44px; opacity:.2; }
+    .pbi-placeholder h3 { font-size:14px; font-weight:600; color:var(--text-hi); }
     .pbi-placeholder p  { font-size:12px; max-width:300px; line-height:1.6; }
-    .pbi-placeholder code { background:#fff; border:1px solid var(--border); border-radius:6px; padding:4px 10px; font-size:11px; color:var(--teal-dark); display:inline-block; margin-top:6px; }
+    .pbi-placeholder code { background:#fff; border:1px solid var(--border); border-radius:5px; padding:3px 8px; font-size:11px; color:#0B1F3A; display:inline-block; margin-top:4px; }
 
     /* ── FAB ── */
-    #chat-fab { position:fixed; bottom:var(--fab-b); right:var(--fab-r); width:52px; height:52px; border-radius:50%; background:var(--teal); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(0,164,153,.4); z-index:8000; transition:transform .2s,background .2s; }
-    #chat-fab:hover { background:var(--teal-dark); transform:scale(1.08); }
-    #chat-fab svg { width:22px; height:22px; }
-    #fab-dot { position:absolute; top:4px; right:4px; width:10px; height:10px; border-radius:50%; background:#e74c3c; border:2px solid #fff; display:none; }
+    #chat-fab { position:fixed; bottom:var(--fab-b); right:var(--fab-r); width:50px; height:50px; border-radius:50%; background:var(--accent); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 18px rgba(0,0,0,.25); z-index:8000; transition:transform .2s,background .2s; }
+    #chat-fab:hover { background:#374151; transform:scale(1.07); }
+    #chat-fab svg { width:20px; height:20px; }
+    #fab-dot { position:absolute; top:4px; right:4px; width:9px; height:9px; border-radius:50%; background:#e74c3c; border:2px solid #fff; display:none; }
 
     /* ── POPUP ── */
-    #chat-popup {
-      position:fixed;
-      bottom:calc(var(--fab-b) + 64px);
-      right:var(--fab-r);
-      width:var(--chat-w);
-      height:var(--chat-h);
-      background:#fff;
-      border-radius:16px;
-      box-shadow:0 8px 40px rgba(0,0,0,.18);
-      display:flex; flex-direction:column;
-      overflow:hidden;
-      z-index:7999;
-      transform:scale(.9) translateY(20px);
-      opacity:0; pointer-events:none;
-      transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .2s;
-    }
+    #chat-popup { position:fixed; bottom:calc(var(--fab-b) + 62px); right:var(--fab-r); width:var(--chat-w); height:var(--chat-h); background:#fff; border-radius:16px; box-shadow:0 8px 40px rgba(0,0,0,.16); display:flex; flex-direction:column; overflow:hidden; z-index:7999; transform:scale(.9) translateY(20px); opacity:0; pointer-events:none; transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .2s; }
     #chat-popup.open { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
-    #chat-popup.maximized {
-      bottom:0 !important; right:0 !important;
-      width:100vw !important; height:calc(100vh - 48px) !important;
-      border-radius:0;
-      transform:scale(1) translateY(0) !important;
-    }
+    #chat-popup.maximized { bottom:0!important; right:0!important; width:100vw!important; height:calc(100vh - 44px)!important; border-radius:0; transform:scale(1) translateY(0)!important; }
     @media (max-width:480px),(max-height:600px) {
-      #chat-popup.open:not(.maximized) {
-        bottom:0 !important; right:0 !important;
-        width:100vw !important; height:calc(100dvh - 48px) !important;
-        border-radius:0;
-      }
+      #chat-popup.open:not(.maximized) { bottom:0!important; right:0!important; width:100vw!important; height:calc(100dvh - 44px)!important; border-radius:0; }
     }
 
-    /* ── CHAT HEADER ── */
-    #chat-header { background:var(--teal); padding:9px 12px; display:flex; align-items:center; gap:8px; flex-shrink:0; }
-    .ch-avatar { width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,.25); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; flex-shrink:0; }
-    .ch-info h3 { font-size:12px; font-weight:700; color:#fff; margin:0; }
-    .ch-info p  { font-size:9.5px; color:rgba(255,255,255,.7); margin:1px 0 0; }
-    .ch-dot { width:5px; height:5px; border-radius:50%; background:#7fffda; flex-shrink:0; animation:pulse 2.4s ease-in-out infinite; }
+    /* ── CHAT HEADER — navy minimalista ── */
+    #chat-header { background:var(--navy); padding:9px 12px; display:flex; align-items:center; gap:9px; flex-shrink:0; }
+    .ch-avatar { width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .ch-avatar svg { width:14px; height:14px; }
+    .ch-info { flex:1; }
+    .ch-info h3 { font-size:12px; font-weight:600; color:#fff; margin:0; display:flex; align-items:center; gap:6px; }
+    .ch-badge { font-size:9.5px; background:rgba(255,255,255,.12); color:rgba(255,255,255,.7); padding:1px 7px; border-radius:10px; font-weight:400; }
+    .ch-info p  { font-size:9.5px; color:rgba(255,255,255,.45); margin:1px 0 0; }
+    .ch-dot { width:5px; height:5px; border-radius:50%; background:#6ee7b7; flex-shrink:0; animation:pulse 2.4s ease-in-out infinite; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-    .ch-actions { margin-left:auto; display:flex; align-items:center; gap:3px; }
-    .ch-btn { background:rgba(255,255,255,.15); border:none; cursor:pointer; color:#fff; width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; transition:background .15s; flex-shrink:0; }
-    .ch-btn:hover { background:rgba(255,255,255,.28); }
+    .ch-actions { display:flex; align-items:center; gap:3px; }
+    .ch-btn { background:rgba(255,255,255,.08); border:none; cursor:pointer; color:rgba(255,255,255,.7); width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; transition:background .15s; }
+    .ch-btn:hover { background:rgba(255,255,255,.18); }
     .ch-btn svg { width:13px; height:13px; }
 
     /* ── MESSAGES ── */
@@ -114,36 +96,39 @@
     #chat-messages::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
 
     .row { display:flex; align-items:flex-end; gap:6px; max-width:88%; animation:fadeup .15s ease both; }
-    @keyframes fadeup { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeup { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
     .row.bot  { align-self:flex-start; }
     .row.user { align-self:flex-end; flex-direction:row-reverse; }
 
-    .av { width:22px; height:22px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; }
-    .av.bot  { background:var(--teal-light); color:var(--teal-dark); border:1px solid var(--border-teal); }
-    .av.user { background:var(--teal); color:#fff; overflow:hidden; }
+    .av { width:22px; height:22px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+    .av.bot  { background:var(--navy); border:1px solid rgba(11,31,58,.15); }
+    .av.bot svg { width:11px; height:11px; }
+    .av.user { background:var(--accent); color:#fff; overflow:hidden; font-size:9px; font-weight:600; }
     .av.user img { width:100%; height:100%; object-fit:cover; }
 
     .bubble { padding:7px 11px; border-radius:13px; font-size:12px; line-height:1.55; max-width:100%; word-break:break-word; }
-    .bubble.bot  { background:#f2f4f6; border:1px solid var(--border); border-bottom-left-radius:3px; color:var(--text-hi); }
-    .bubble.user { background:var(--teal); border-bottom-right-radius:3px; color:#fff; }
+    .bubble.bot  { background:#f4f5f7; border:0.5px solid #e5e7eb; border-bottom-left-radius:3px; color:var(--text-hi); }
+    .bubble.user { background:var(--accent); border-bottom-right-radius:3px; color:#fff; }
 
-    /* Burbuja provisoria — estilo distinto para diferenciarla */
+    /* Provisorio — gris neutro, texto plano, sin colores ni iconos */
     .bubble.provisional {
-      background:#fffbea;
-      border:1px dashed #f0c040;
-      color:var(--text-mid);
-      font-style:italic;
-      font-size:11.5px;
+      background:#f9fafb;
+      border:0.5px solid #e5e7eb;
+      color:#6b7280;
+      font-size:12px;
+      font-style:normal;
     }
+    .prov-dots { display:inline-flex; gap:3px; align-items:center; margin-right:6px; vertical-align:middle; }
+    .prov-dot  { width:4px; height:4px; border-radius:50%; background:#9ca3af; animation:pdot 1.2s ease-in-out infinite; }
+    .prov-dot:nth-child(2){animation-delay:.15s} .prov-dot:nth-child(3){animation-delay:.3s}
+    @keyframes pdot { 0%,80%,100%{opacity:.25;transform:scale(.8)} 40%{opacity:1;transform:scale(1)} }
 
     .bubble table { border-collapse:collapse; width:100%; margin-top:5px; font-size:11px; }
-    .bubble th { background:#e6f7f6; color:var(--teal-dark); padding:4px 7px; text-align:left; font-weight:700; border:1px solid var(--border-teal); }
-    .bubble td { padding:3px 7px; border:1px solid var(--border); }
-    .bubble tr:nth-child(even) td { background:#fafbfc; }
+    .bubble th { background:#f0f2f4; color:var(--text-hi); padding:4px 7px; text-align:left; font-weight:600; border:1px solid #e5e7eb; }
+    .bubble td { padding:3px 7px; border:1px solid #f0f0f0; }
     .bubble pre { background:#f0f3f5; border-radius:5px; padding:6px 8px; font-size:10.5px; overflow-x:auto; margin-top:5px; font-family:monospace; }
 
-    /* Chart card */
-    .chart-card { margin-top:6px; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:#fff; width:100%; }
+    .chart-card { margin-top:6px; border:0.5px solid #e5e7eb; border-radius:10px; overflow:hidden; background:#fff; width:100%; }
     .chart-card iframe { width:100%; border:none; display:block; min-height:400px; }
 
     .ts { font-size:9.5px; color:var(--text-lo); margin-top:2px; padding:0 2px; }
@@ -151,47 +136,36 @@
 
     /* Typing */
     .typing-row { display:flex; align-items:flex-end; gap:6px; align-self:flex-start; }
-    .typing-bub { background:#f2f4f6; border:1px solid var(--border); border-radius:13px; border-bottom-left-radius:3px; padding:9px 12px; display:flex; align-items:center; gap:4px; }
-    .dot { width:5px; height:5px; border-radius:50%; background:var(--teal); animation:bounce 1.3s ease-in-out infinite; }
+    .typing-bub { background:#f4f5f7; border:0.5px solid #e5e7eb; border-radius:13px; border-bottom-left-radius:3px; padding:9px 12px; display:flex; align-items:center; gap:4px; }
+    .dot { width:4px; height:4px; border-radius:50%; background:#9ca3af; animation:bounce 1.3s ease-in-out infinite; }
     .dot:nth-child(2){animation-delay:.18s} .dot:nth-child(3){animation-delay:.36s}
-    @keyframes bounce { 0%,80%,100%{transform:translateY(0);opacity:.3} 40%{transform:translateY(-4px);opacity:1} }
+    @keyframes bounce { 0%,80%,100%{transform:translateY(0);opacity:.3} 40%{transform:translateY(-4px);opacity:.9} }
 
     /* Suggestions */
-    #chat-suggs {
-      padding:6px 10px 7px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:5px;
-      flex-shrink:0;
-      background:#fff;
-      border-top:1px solid var(--border);
-      max-height:90px;
-      overflow-y:auto;
-      scrollbar-width:none;
-    }
+    #chat-suggs { padding:6px 10px 7px; display:flex; flex-wrap:wrap; gap:5px; flex-shrink:0; background:#fff; border-top:0.5px solid #f0f0f0; max-height:90px; overflow-y:auto; scrollbar-width:none; }
     #chat-suggs::-webkit-scrollbar { display:none; }
-    .chip { background:#fff; border:1px solid var(--border-teal); color:var(--teal-dark); border-radius:20px; padding:4px 9px; font-size:10.5px; font-family:var(--font); cursor:pointer; transition:background .15s,transform .1s; white-space:nowrap; }
-    .chip:hover { background:var(--teal-light); transform:translateY(-1px); }
+    .chip { background:#fff; border:0.5px solid #e5e7eb; color:var(--text-mid); border-radius:20px; padding:4px 10px; font-size:10.5px; font-family:var(--font); cursor:pointer; transition:background .12s,border-color .12s; white-space:nowrap; }
+    .chip:hover { background:#f4f5f7; border-color:#d1d5db; color:var(--text-hi); }
 
     /* Input */
-    #chat-input-area { background:#fff; border-top:1px solid var(--border); padding:8px 12px; display:flex; align-items:flex-end; gap:7px; flex-shrink:0; }
-    #chat-input { flex:1; background:#f7f9fa; border:1px solid var(--border); border-radius:16px; padding:7px 12px; color:var(--text-hi); font-family:var(--font); font-size:12px; resize:none; outline:none; max-height:70px; overflow-y:auto; line-height:1.4; transition:border-color .2s,box-shadow .2s; scrollbar-width:none; }
+    #chat-input-area { background:#fff; border-top:0.5px solid #f0f0f0; padding:8px 12px; display:flex; align-items:flex-end; gap:7px; flex-shrink:0; }
+    #chat-input { flex:1; background:#f7f9fa; border:0.5px solid #e5e7eb; border-radius:16px; padding:7px 12px; color:var(--text-hi); font-family:var(--font); font-size:12px; resize:none; outline:none; max-height:70px; overflow-y:auto; line-height:1.4; transition:border-color .2s; scrollbar-width:none; }
     #chat-input::-webkit-scrollbar { display:none; }
     #chat-input::placeholder { color:var(--text-lo); }
-    #chat-input:focus { border-color:var(--teal); box-shadow:0 0 0 2px var(--teal-glow); }
-    #chat-send { width:32px; height:32px; border-radius:50%; background:var(--teal); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .15s,transform .1s,opacity .15s; }
-    #chat-send:hover:not(:disabled) { background:var(--teal-dark); transform:scale(1.06); }
-    #chat-send:disabled { opacity:.35; cursor:default; }
+    #chat-input:focus { border-color:#9ca3af; }
+    #chat-send { width:30px; height:30px; border-radius:50%; background:var(--accent); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .15s,opacity .15s; }
+    #chat-send:hover:not(:disabled) { background:#374151; }
+    #chat-send:disabled { opacity:.3; cursor:default; }
     #chat-send svg { width:13px; height:13px; fill:#fff; }
 
     /* Empty */
     #chat-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; flex:1; text-align:center; padding:16px; color:var(--text-mid); }
-    .empty-icon { width:40px; height:40px; background:var(--teal-light); border:1px solid var(--border-teal); border-radius:12px; display:flex; align-items:center; justify-content:center; }
-    .empty-icon svg { width:18px; height:18px; stroke:var(--teal); fill:none; }
-    #chat-empty h2 { font-size:12px; font-weight:700; color:var(--text-hi); }
+    .empty-icon { width:40px; height:40px; background:#f4f5f7; border:0.5px solid #e5e7eb; border-radius:12px; display:flex; align-items:center; justify-content:center; }
+    .empty-icon svg { width:18px; height:18px; stroke:var(--text-mid); fill:none; }
+    #chat-empty h2 { font-size:12px; font-weight:600; color:var(--text-hi); }
     #chat-empty p  { font-size:11px; max-width:200px; line-height:1.5; }
 
-    #toast { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:#c0392b; color:#fff; font-size:11px; padding:6px 14px; border-radius:20px; opacity:0; pointer-events:none; transition:opacity .2s; z-index:99999; white-space:nowrap; }
+    #toast { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:#1c2333; color:#fff; font-size:11px; padding:6px 14px; border-radius:20px; opacity:0; pointer-events:none; transition:opacity .2s; z-index:99999; white-space:nowrap; }
     #toast.show { opacity:1; }
   </style>
 </head>
@@ -207,31 +181,42 @@
 <!-- LOGIN -->
 <div id="login-screen">
   <div class="login-card">
-    <div class="login-logo">OC</div>
+    <div class="login-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        <circle cx="9" cy="10" r="1" fill="#fff" stroke="none"/>
+        <circle cx="12" cy="10" r="1" fill="#fff" stroke="none"/>
+        <circle cx="15" cy="10" r="1" fill="#fff" stroke="none"/>
+      </svg>
+    </div>
     <h2>Customer Intelligence</h2>
     <p>Portal de datos OCASA.<br>Iniciá sesión con tu cuenta corporativa.</p>
     <div class="login-divider"><span>Continuar con Google</span></div>
     <div id="google-btn-wrapper"></div>
     <button id="google-custom-btn" onclick="triggerGoogleLogin()">
       <svg width="18" height="18" viewBox="0 0 48 48">
-        <path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 37 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/>
+        <path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 12 2 2 12 2 24s10 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/>
         <path fill="#34A853" d="M6.3 14.7l7 5.1C15.1 16 19.2 13 24 13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 16.3 2 9.7 7.4 6.3 14.7z"/>
         <path fill="#FBBC05" d="M24 46c5.9 0 10.9-2 14.5-5.4l-6.7-5.5C29.9 36.8 27.1 38 24 38c-6.1 0-10.7-3.9-11.8-9.1l-7 5.4C8.6 41.4 15.7 46 24 46z"/>
         <path fill="#EA4335" d="M44.5 20H24v8.5h11.8c-1 3-3.2 5.5-6.1 7.1l6.7 5.5C40.5 37.8 44 31.5 44 24c0-1.3-.2-2.7-.5-4z"/>
       </svg>
       Iniciar sesión con Google
     </button>
-    <div id="login-error">⚠️ Solo se permite acceso con cuentas <strong>@ocasa.com</strong>.</div>
+    <div id="login-error">Solo se permite acceso con cuentas <strong>@ocasa.com</strong>.</div>
     <div class="login-footer">Gerencia CX · Customer Intelligence<br>Uso interno — información confidencial</div>
   </div>
 </div>
 
-<!-- NAV -->
+<!-- NAV — minimalista -->
 <nav>
-  <div class="nav-logo">OC</div>
+  <div class="nav-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" stroke-linecap="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+  </div>
   <div>
     <div class="nav-title">Customer Intelligence</div>
-    <div class="nav-sub">Gerencia CX</div>
+    <div class="nav-sub">Gerencia CX · OCASA</div>
   </div>
   <div class="nav-right">
     <div id="user-pill">
@@ -242,7 +227,7 @@
   </div>
 </nav>
 
-<!-- POWER BI -->
+<!-- POWER BI — directo, sin header intermedio -->
 <div id="pbi-wrap">
   <div class="pbi-placeholder" id="pbi-placeholder">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
@@ -251,11 +236,14 @@
   </div>
 </div>
 
-<!-- FAB -->
-<button id="chat-fab" onclick="toggleChat()" title="Asistente OCASA">
+<!-- FAB — icono del bot -->
+<button id="chat-fab" onclick="toggleChat()" title="Andy · Asistente de Datos">
   <div id="fab-dot"></div>
-  <svg id="fab-icon-chat" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <svg id="fab-icon-chat" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    <circle cx="9" cy="10" r="1" fill="#fff" stroke="none"/>
+    <circle cx="12" cy="10" r="1" fill="#fff" stroke="none"/>
+    <circle cx="15" cy="10" r="1" fill="#fff" stroke="none"/>
   </svg>
   <svg id="fab-icon-close" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" style="display:none">
     <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -264,10 +252,18 @@
 
 <!-- CHAT POPUP -->
 <div id="chat-popup">
+  <!-- Header navy minimalista -->
   <div id="chat-header">
-    <div class="ch-avatar">IA</div>
+    <div class="ch-avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        <circle cx="9" cy="10" r="1" fill="rgba(255,255,255,.8)" stroke="none"/>
+        <circle cx="12" cy="10" r="1" fill="rgba(255,255,255,.8)" stroke="none"/>
+        <circle cx="15" cy="10" r="1" fill="rgba(255,255,255,.8)" stroke="none"/>
+      </svg>
+    </div>
     <div class="ch-info">
-      <h3>Asistente de Datos</h3>
+      <h3>Andy <span class="ch-badge">Beta</span></h3>
       <p>Customer Intelligence · OCASA</p>
     </div>
     <span class="ch-dot"></span>
@@ -291,24 +287,27 @@
   <div id="chat-messages">
     <div id="chat-empty">
       <div class="empty-icon">
-        <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       </div>
       <h2>¿En qué puedo ayudarte?</h2>
       <p>Preguntame sobre SLA, efectividad, backlog, NPS o métricas operativas.</p>
     </div>
   </div>
 
+  <!-- Sugerencias variadas -->
   <div id="chat-suggs">
-    <button class="chip" onclick="suggest(this)">Impacto SLA por cliente semana pasada</button>
-    <button class="chip" onclick="suggest(this)">Impacto SLA por sucursal último mes</button>
-    <button class="chip" onclick="suggest(this)">Puntos de dolor del NPS mes pasado</button>
-    <button class="chip" onclick="suggest(this)">Motivos de no entrega semana pasada</button>
+    <button class="chip" onclick="suggest(this)">SLA por sucursal semana pasada</button>
+    <button class="chip" onclick="suggest(this)">Backlog acumulado por cliente</button>
+    <button class="chip" onclick="suggest(this)">NPS este mes</button>
+    <button class="chip" onclick="suggest(this)">Incidencias operativas último mes</button>
     <button class="chip" onclick="suggest(this)">Efectividad 1ra visita por sucursal</button>
-    <button class="chip" onclick="suggest(this)">Backlog por IATA hoy</button>
+    <button class="chip" onclick="suggest(this)">Impacto de SLA por cliente</button>
     <button class="chip" onclick="suggest(this)">Evolutivo SLA últimas 4 semanas</button>
-    <button class="chip" onclick="suggest(this)">NPS por sucursal este mes</button>
-    <button class="chip" onclick="suggest(this)">Top clientes por volumen</button>
-    <button class="chip" onclick="suggest(this)">Efectividad final por cliente</button>
+    <button class="chip" onclick="suggest(this)">Backlog histórico por semana</button>
+    <button class="chip" onclick="suggest(this)">Correlación backlog y SLA</button>
+    <button class="chip" onclick="suggest(this)">Tablero de Brandlive</button>
+    <button class="chip" onclick="suggest(this)">Motivos de no entrega</button>
+    <button class="chip" onclick="suggest(this)">Desvíos operativos semana pasada</button>
   </div>
 
   <div id="chat-input-area">
@@ -335,13 +334,11 @@
   const toastEl  = document.getElementById('toast');
   const fabDot   = document.getElementById('fab-dot');
 
-  // Power BI
   if (POWERBI_EMBED_URL) {
     document.getElementById('pbi-wrap').innerHTML =
       `<iframe src="${POWERBI_EMBED_URL}" allowfullscreen="true" style="width:100%;height:100%;border:none;display:block;"></iframe>`;
   }
 
-  // ── Google Auth ──────────────────────────────────────────────────
   function initGoogleAuth() {
     const saved = sessionStorage.getItem('ocasa_user');
     if (saved) { currentUser = JSON.parse(saved); onLoginSuccess(currentUser); return; }
@@ -350,12 +347,8 @@
       { theme: 'outline', size: 'large', text: 'signin_with', shape: 'rectangular', width: 260 });
     google.accounts.id.prompt();
   }
-
   if (typeof google !== 'undefined') { initGoogleAuth(); }
-  else {
-    window.onGoogleLibraryLoad = initGoogleAuth;
-    window.addEventListener('load', () => { if (typeof google !== 'undefined' && !currentUser) initGoogleAuth(); });
-  }
+  else { window.onGoogleLibraryLoad = initGoogleAuth; window.addEventListener('load', () => { if (typeof google !== 'undefined' && !currentUser) initGoogleAuth(); }); }
 
   function handleCredential(response) {
     const payload = JSON.parse(atob(response.credential.split('.')[1]));
@@ -390,7 +383,7 @@
     document.getElementById('user-avatar').src = user.picture || '';
     document.getElementById('user-name').textContent = user.name.split(' ')[0];
     document.getElementById('user-pill').style.display = 'flex';
-    setTimeout(() => appendBot(`¡Hola, ${user.name.split(' ')[0]}! 👋 Soy el asistente de datos de OCASA. Podés preguntarme sobre SLA, efectividad, backlog, NPS, motivos de no entrega y más.`, null), 400);
+    setTimeout(() => appendBot(`Hola, ${user.name.split(' ')[0]}. Soy Andy, el asistente de datos de OCASA. Podés preguntarme sobre SLA, efectividad, backlog, NPS, incidencias y más.`, null), 400);
     setTimeout(() => { if (!chatOpen) fabDot.style.display = 'block'; }, 3500);
   }
 
@@ -400,7 +393,6 @@
     location.reload();
   }
 
-  // ── Chat toggle ──────────────────────────────────────────────────
   function toggleChat() {
     chatOpen = !chatOpen;
     popup.classList.toggle('open', chatOpen);
@@ -418,11 +410,7 @@
         const h = doc.body.scrollHeight;
         if (h > 80) iframe.style.height = Math.min(h + 16, 2400) + 'px';
         const win = iframe.contentWindow;
-        if (win && win.Chart) {
-          Object.values(win.Chart.instances || {}).forEach(chart => {
-            try { chart.resize(); } catch(e) {}
-          });
-        }
+        if (win && win.Chart) Object.values(win.Chart.instances || {}).forEach(c => { try { c.resize(); } catch(e) {} });
       } catch(e) {}
     });
   }
@@ -436,11 +424,9 @@
   }
 
   if (typeof ResizeObserver !== 'undefined') {
-    const ro = new ResizeObserver(() => { if (maximized) setTimeout(resizeAllIframes, 100); });
-    ro.observe(document.getElementById('chat-popup'));
+    new ResizeObserver(() => { if (maximized) setTimeout(resizeAllIframes, 100); }).observe(popup);
   }
 
-  // ── Input ────────────────────────────────────────────────────────
   inputEl.addEventListener('input', () => {
     inputEl.style.height = 'auto';
     inputEl.style.height = Math.min(inputEl.scrollHeight, 70) + 'px';
@@ -455,43 +441,22 @@
     setTimeout(() => { inputEl.value = btn.textContent; inputEl.dispatchEvent(new Event('input')); sendMessage(); }, 150);
   }
 
-  // ── Mensaje provisorio según intención detectada localmente ──────
+  // Mensaje provisorio — texto plano, sin emojis ni colores
   function getProvisionalMessage(text) {
     const t = (text || '').toLowerCase();
-
-    if ((t.includes('impacto') || t.includes('quién') || t.includes('arrastr') || t.includes('target')) && t.includes('sla'))
-      return '📊 Entendido — voy a calcular el SLA y el impacto por dimensión. Esto puede tardar unos segundos...';
-    if ((t.includes('impacto') || t.includes('quién') || t.includes('arrastr')) && t.includes('efectividad'))
-      return '📊 Calculando efectividad con análisis de impacto...';
-    if (t.includes('puntos de dolor') || (t.includes('nps') && (t.includes('queja') || t.includes('detractor') || t.includes('dicen'))))
-      return '💬 Analizando mensajes y puntos de dolor del NPS. Un momento...';
-    if (t.includes('nps'))
-      return '⭐ Consultando datos de NPS...';
-    if (t.includes('motivo') && (t.includes('no entrega') || t.includes('falla') || t.includes('primera visita') || t.includes('1era')))
-      return '🔍 Analizando motivos de no entrega...';
-    if (t.includes('backlog'))
-      return '📦 Consultando backlog operativo...';
-    if (t.includes('efectividad'))
-      return '🚚 Calculando efectividad de entregas...';
-    if (t.includes('sla'))
-      return '📈 Consultando SLA desde el Data Warehouse...';
-    if (t.includes('evolu') || t.includes('histor') || t.includes('semanas') || t.includes('meses'))
-      return '📅 Generando evolutivo histórico...';
-    if (t.includes('excel') || t.includes('export') || t.includes('descarg') || t.includes('detalle'))
-      return '⬇️ Preparando datos para exportar...';
-    if (t.includes('causa') || t.includes('por qué') || t.includes('por que'))
-      return '🔎 Analizando posibles causas...';
-    if (t.includes('correlaci'))
-      return '🔗 Calculando correlación entre métricas...';
-    if (t.includes('sucursal') || t.includes('iata'))
-      return '🏢 Consultando datos por sucursal...';
-    if (t.includes('cliente'))
-      return '👤 Consultando datos por cliente...';
-
-    return '⚙️ Procesando tu consulta en el Data Warehouse...';
+    if (t.includes('impacto') && t.includes('sla'))       return 'Calculando impacto de SLA por dimensión...';
+    if (t.includes('nps') && (t.includes('motivo') || t.includes('detractor') || t.includes('dicen'))) return 'Analizando mensajes del NPS...';
+    if (t.includes('nps'))                                 return 'Consultando datos de NPS...';
+    if (t.includes('backlog'))                             return 'Consultando backlog operativo...';
+    if (t.includes('efectividad'))                         return 'Calculando efectividad de entregas...';
+    if (t.includes('sla'))                                 return 'Consultando SLA desde el Data Warehouse...';
+    if (t.includes('incidencia') || t.includes('desvío') || t.includes('desvio')) return 'Analizando incidencias operativas...';
+    if (t.includes('correlaci'))                           return 'Calculando correlación entre métricas...';
+    if (t.includes('excel') || t.includes('export'))       return 'Preparando datos para exportar...';
+    if (t.includes('evolu') || t.includes('histor'))       return 'Generando evolutivo histórico...';
+    return 'Procesando tu consulta...';
   }
 
-  // ── Send ─────────────────────────────────────────────────────────
   async function sendMessage() {
     const text = inputEl.value.trim();
     if (!text || isWaiting || !currentUser) return;
@@ -502,38 +467,23 @@
     inputEl.value = ''; inputEl.style.height = 'auto';
     sendBtn.disabled = true; isWaiting = true;
 
-    // 1. Mostrar mensaje provisorio inmediato (antes de llamar a n8n)
-    const provisionalId = appendProvisional(getProvisionalMessage(text));
-
-    // 2. Mostrar typing debajo del provisorio
-    const tid = showTyping();
+    const provId = appendProvisional(getProvisionalMessage(text));
+    const tid    = showTyping();
 
     try {
       const res = await fetch(N8N_WEBHOOK_URL, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message:     text,
-          session_id:  sessionId,
-          timestamp:   new Date().toISOString(),
-          user_email:  currentUser.email,
-          user_name:   currentUser.name
-        })
+        body: JSON.stringify({ message: text, session_id: sessionId, timestamp: new Date().toISOString(), user_email: currentUser.email, user_name: currentUser.name })
       });
-
-      // 3. Remover provisorio y typing cuando llega la respuesta real
-      removeProvisional(provisionalId);
-      removeTyping(tid);
-
+      removeProvisional(provId); removeTyping(tid);
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data  = await res.json();
       const reply = data.response ?? data.message ?? data.text ?? data.answer ?? 'Sin respuesta.';
       const html  = data.html ?? data.chart_html ?? null;
       appendBot(reply, html);
-
     } catch(err) {
-      removeProvisional(provisionalId);
-      removeTyping(tid);
-      appendBot('⚠️ No se pudo conectar a la base. Verificá el flujo o intentá más tarde.', null);
+      removeProvisional(provId); removeTyping(tid);
+      appendBot('No se pudo conectar a la base. Verificá el flujo o intentá más tarde.', null);
       showToast('Error de conexión');
     }
 
@@ -542,7 +492,13 @@
     inputEl.focus();
   }
 
-  // ── Render helpers ───────────────────────────────────────────────
+  // Avatar bot reutilizable
+  function botAv() {
+    const av = document.createElement('div'); av.className = 'av bot';
+    av.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><circle cx="9" cy="10" r="1" fill="rgba(255,255,255,.85)" stroke="none"/><circle cx="12" cy="10" r="1" fill="rgba(255,255,255,.85)" stroke="none"/><circle cx="15" cy="10" r="1" fill="rgba(255,255,255,.85)" stroke="none"/></svg>`;
+    return av;
+  }
+
   function appendUser(text) {
     const row = document.createElement('div'); row.className = 'row user';
     const av  = document.createElement('div'); av.className = 'av user';
@@ -555,80 +511,55 @@
     msgsEl.appendChild(row); scroll();
   }
 
-  // Burbuja provisoria — aparece inmediato, se remueve cuando llega la respuesta real
   function appendProvisional(text) {
     const id  = 'prov_' + Date.now();
     const row = document.createElement('div'); row.className = 'row bot'; row.id = id;
-    const av  = document.createElement('div'); av.className = 'av bot'; av.textContent = 'IA';
-    const bub = document.createElement('div'); bub.className = 'bubble bot provisional'; bub.textContent = text;
+    const bub = document.createElement('div'); bub.className = 'bubble bot provisional';
+    // Tres puntitos + texto plano, sin emojis
+    bub.innerHTML = `<span class="prov-dots"><span class="prov-dot"></span><span class="prov-dot"></span><span class="prov-dot"></span></span>${text}`;
     const inn = document.createElement('div'); inn.style.cssText = 'display:flex;flex-direction:column;';
-    inn.appendChild(bub); row.appendChild(av); row.appendChild(inn);
-    msgsEl.appendChild(row); scroll();
-    return id;
+    inn.appendChild(bub); row.appendChild(botAv()); row.appendChild(inn);
+    msgsEl.appendChild(row); scroll(); return id;
   }
 
-  function removeProvisional(id) {
-    const el = document.getElementById(id);
-    if (el) el.remove();
-  }
+  function removeProvisional(id) { const el = document.getElementById(id); if (el) el.remove(); }
 
   function appendBot(text, chartHtml) {
     const row = document.createElement('div'); row.className = 'row bot';
-    const av  = document.createElement('div'); av.className = 'av bot'; av.textContent = 'IA';
     const inn = document.createElement('div'); inn.style.cssText = 'display:flex;flex-direction:column;max-width:100%;';
-
     if (text) {
       const bub = document.createElement('div'); bub.className = 'bubble bot';
       bub.innerHTML = fmt(text); inn.appendChild(bub);
     }
-
     if (chartHtml) {
       const card   = document.createElement('div'); card.className = 'chart-card';
       const iframe = document.createElement('iframe');
       iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-downloads');
       iframe.style.cssText = 'width:100%;border:none;display:block;min-height:400px;';
       card.appendChild(iframe); inn.appendChild(card);
-
-      const responsiveCSS = `<style>
-        *, *::before, *::after { box-sizing: border-box !important; }
-        html { overflow-x: hidden !important; }
-        body { margin:0 !important; padding:8px !important; overflow-x:hidden !important; max-width:100vw !important; word-break:break-word !important; }
-        img, canvas, video, table { max-width:100% !important; }
-        [style*="width:"] { max-width:100% !important; }
-      </style>`;
-
-      let fullHtml = chartHtml;
-      fullHtml = fullHtml.includes('</head>')
-        ? fullHtml.replace('</head>', responsiveCSS + '</head>')
-        : responsiveCSS + fullHtml;
-
+      const rCSS = `<style>*,*::before,*::after{box-sizing:border-box!important}html{overflow-x:hidden!important}body{margin:0!important;padding:8px!important;overflow-x:hidden!important;max-width:100vw!important;word-break:break-word!important}img,canvas,video,table{max-width:100%!important}</style>`;
+      let full = chartHtml;
+      full = full.includes('</head>') ? full.replace('</head>', rCSS + '</head>') : rCSS + full;
       requestAnimationFrame(() => {
-        iframe.contentDocument.open();
-        iframe.contentDocument.write(fullHtml);
-        iframe.contentDocument.close();
+        iframe.contentDocument.open(); iframe.contentDocument.write(full); iframe.contentDocument.close();
         iframe.onload = () => {
           try { const h = iframe.contentDocument.body.scrollHeight; if (h > 80) iframe.style.height = Math.min(h + 16, 2400) + 'px'; } catch(e) {}
-          setTimeout(() => {
-            try { const h2 = iframe.contentDocument.body.scrollHeight; if (h2 > 80) iframe.style.height = Math.min(h2 + 16, 2400) + 'px'; } catch(e) {}
-          }, 800);
+          setTimeout(() => { try { const h2 = iframe.contentDocument.body.scrollHeight; if (h2 > 80) iframe.style.height = Math.min(h2 + 16, 2400) + 'px'; } catch(e) {} }, 800);
         };
       });
     }
-
     const ts = document.createElement('div'); ts.className = 'ts'; ts.textContent = now();
-    inn.appendChild(ts); row.appendChild(av); row.appendChild(inn);
+    inn.appendChild(ts); row.appendChild(botAv()); row.appendChild(inn);
     msgsEl.appendChild(row); scroll();
   }
 
   function showTyping() {
-    const id  = 't' + Date.now();
+    const id = 't' + Date.now();
     const row = document.createElement('div'); row.className = 'typing-row'; row.id = id;
-    row.innerHTML = `
-      <div class="av bot">IA</div>
-      <div class="typing-bub">
-        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-      </div>`;
-    msgsEl.appendChild(row); scroll(); return id;
+    row.appendChild(botAv());
+    const bub = document.createElement('div'); bub.className = 'typing-bub';
+    bub.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+    row.appendChild(bub); msgsEl.appendChild(row); scroll(); return id;
   }
   function removeTyping(id) { const el = document.getElementById(id); if (el) el.remove(); }
 
@@ -636,7 +567,7 @@
     return raw
       .replace(/```[\w]*\n?([\s\S]*?)```/g, '<pre>$1</pre>')
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/`([^`]+)`/g, "<code style='background:#e6f7f6;color:#007D74;padding:1px 4px;border-radius:3px;font-size:10.5px;'>$1</code>")
+      .replace(/`([^`]+)`/g, "<code style='background:#f0f0f0;color:#374151;padding:1px 4px;border-radius:3px;font-size:10.5px;'>$1</code>")
       .replace(/\n/g, '<br>');
   }
 
