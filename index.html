@@ -22,9 +22,12 @@
     body { font-family: var(--font); background: var(--bg); color: var(--text-hi); display: flex; flex-direction: column; font-size: 13px; }
 
     /* ── LOGIN ── */
-    #login-screen { position:fixed; inset:0; background:linear-gradient(135deg,#0B1F3A,#163055); display:flex; align-items:center; justify-content:center; z-index:9999; transition:opacity .3s; }
+    #login-screen { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:9999; transition:opacity .3s; overflow:hidden; }
+    #login-bg-pbi { position:absolute; inset:0; width:100%; height:100%; border:none; z-index:0; pointer-events:none; }
+    #login-bg-overlay { position:absolute; inset:0; background:rgba(11,31,58,.55); z-index:1; }
+    #login-screen .login-card { position:relative; z-index:2; }
     #login-screen.hidden { opacity:0; pointer-events:none; }
-    .login-card { background:#fff; border-radius:18px; padding:clamp(24px,5vw,40px) clamp(20px,5vw,36px); max-width:360px; width:90%; text-align:center; box-shadow:0 8px 48px rgba(0,0,0,.28); }
+    .login-card { background:#fff; border-radius:18px; padding:clamp(24px,5vw,40px) clamp(20px,5vw,36px); max-width:360px; width:90%; text-align:center; box-shadow:0 16px 64px rgba(0,0,0,.5); }
     .login-logo { margin:0 auto 18px; display:flex; justify-content:center; }
     .login-card h2 { font-size:clamp(15px,4vw,18px); font-weight:700; color:var(--text-hi); margin-bottom:6px; }
     .login-card p  { font-size:12px; color:var(--text-mid); margin-bottom:24px; line-height:1.6; }
@@ -32,8 +35,8 @@
     .login-divider span { font-size:11px; color:var(--text-lo); white-space:nowrap; }
     .login-divider::before,.login-divider::after { content:''; flex:1; height:1px; background:var(--border); }
     #google-btn-wrapper { display:flex; justify-content:center; min-height:44px; }
-    #google-custom-btn { display:flex; align-items:center; justify-content:center; gap:10px; width:min(260px,90%); height:44px; margin:8px auto 0; background:#fff; border:1.5px solid #dadce0; border-radius:4px; cursor:pointer; font-family:var(--font); font-size:14px; color:#3c4043; box-shadow:0 1px 3px rgba(0,0,0,.08); transition:box-shadow .2s,background .15s; }
-    #google-custom-btn:hover { box-shadow:0 2px 8px rgba(0,0,0,.15); background:#f8f9fa; }
+    #google-custom-btn { display:flex; align-items:center; justify-content:center; gap:10px; width:min(280px,90%); height:48px; margin:12px auto 0; background:#fff; border:1.5px solid #dadce0; border-radius:6px; cursor:pointer; font-family:var(--font); font-size:14px; font-weight:500; color:#3c4043; box-shadow:0 2px 8px rgba(0,0,0,.12); transition:box-shadow .2s,background .15s; }
+    #google-custom-btn:hover { box-shadow:0 4px 16px rgba(0,0,0,.18); background:#f8f9fa; }
     #login-error { display:none; margin-top:12px; background:#fef0f0; border:1px solid #f5c6c6; border-radius:8px; padding:8px 12px; font-size:11.5px; color:#c0392b; }
     #login-error.show { display:block; }
     .login-footer { margin-top:18px; font-size:10.5px; color:var(--text-lo); line-height:1.6; }
@@ -179,6 +182,8 @@
 
 <!-- LOGIN -->
 <div id="login-screen">
+  <iframe id="login-bg-pbi" src="" tabindex="-1" aria-hidden="true"></iframe>
+  <div id="login-bg-overlay"></div>
   <div class="login-card">
     <div class="login-logo">
       <svg viewBox="0 0 40 40" fill="none" style="width:64px;height:64px;">
@@ -195,8 +200,8 @@
     </div>
     <h2>Customer Intelligence</h2>
     <p>Portal de datos OCASA.<br>Iniciá sesión con tu cuenta corporativa.</p>
-    <div class="login-divider"><span>Continuar con Google</span></div>
-    <div id="google-btn-wrapper" style="display:none"></div>
+<div id="google-btn-wrapper"></div>
+    <div style="display:flex;align-items:center;gap:8px;margin:8px 0 4px;"><span style="flex:1;height:1px;background:#e5e7eb;"></span><span style="font-size:11px;color:#aaa;">o bien</span><span style="flex:1;height:1px;background:#e5e7eb;"></span></div>
     <button id="google-custom-btn" onclick="triggerGoogleLogin()">
       <svg width="18" height="18" viewBox="0 0 48 48">
         <path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 12 2 2 12 2 24s10 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/>
@@ -363,13 +368,17 @@
   if (POWERBI_EMBED_URL) {
     document.getElementById('pbi-wrap').innerHTML =
       `<iframe src="${POWERBI_EMBED_URL}" allowfullscreen="true" style="width:100%;height:100%;border:none;display:block;"></iframe>`;
+    const bgPbi = document.getElementById('login-bg-pbi');
+    if (bgPbi) bgPbi.src = POWERBI_EMBED_URL;
   }
 
   function initGoogleAuth() {
     const saved = sessionStorage.getItem('ocasa_user');
     if (saved) { currentUser = JSON.parse(saved); onLoginSuccess(currentUser); return; }
-    // No usamos renderButton ni prompt — solo el botón custom para evitar
-    // errores de dominio no autorizado en Google Cloud Console
+    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredential, ux_mode: 'popup' });
+    google.accounts.id.renderButton(document.getElementById('google-btn-wrapper'),
+      { theme: 'outline', size: 'large', text: 'signin_with', shape: 'rectangular', width: 260 });
+    google.accounts.id.prompt();
   }
   if (typeof google !== 'undefined') { initGoogleAuth(); }
   else { window.onGoogleLibraryLoad = initGoogleAuth; window.addEventListener('load', () => { if (typeof google !== 'undefined' && !currentUser) initGoogleAuth(); }); }
